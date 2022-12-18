@@ -1,0 +1,54 @@
+{
+	"name": "react-component-structure",
+	"displayName": "React component structure",
+	"description": "Create basic strucrure for React component",
+	"version": "0.0.1",
+	"publisher": "VitaliiVilianyk",
+	"engines": {
+		"vscode": "^1.74.0"
+	},
+	"categories": [
+		"Other"
+	],
+	"activationEvents": [
+		"workspaceContains:**/src/components/**"
+	],
+	"main": "./react-component-structure/extension.js",
+	"contributes": {
+		"commands": [
+			{
+				"command": "react-component-structure.helloWorld",
+				"title": "New React component"
+			}
+		],
+		"menus": {
+			"explorer/context": [
+				{
+					"command": "react-component-structure.helloWorld",
+					"group": "navigation",
+					"title": "New React component"
+				}
+			]
+		}
+	},
+	"scripts": {
+		"lint": "eslint .",
+		"pretest": "npm run lint",
+		"test": "vsce package",
+		"vscode:prepublish": "npm run esbuild-base -- --minify",
+		"esbuild-base": "esbuild ./react-component-structure/extension.js --bundle --outfile=out/main.js --external:vscode --format=cjs --platform=node",
+		"esbuild": "npm run esbuild-base -- --sourcemap"
+	},
+	"devDependencies": {
+		"@types/vscode": "^1.74.0",
+		"@types/glob": "^8.0.0",
+		"@types/mocha": "^10.0.1",
+		"@types/node": "16.x",
+		"eslint": "^8.28.0",
+		"glob": "^8.0.3",
+		"mocha": "^10.1.0",
+		"typescript": "^4.9.3",
+		"@vscode/test-electron": "^2.2.0",
+		"esbuild": "^0.16.9"
+	}
+}
