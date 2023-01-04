@@ -17,14 +17,23 @@
 	"contributes": {
 		"commands": [
 			{
-				"command": "react-component-structure.helloWorld",
+				"command": "react-component-structure.createComponent",
 				"title": "New React component"
+			},
+			{
+				"command": "react-component-structure.refactor",
+				"title": "Refactor to function"
 			}
 		],
 		"menus": {
 			"explorer/context": [
 				{
-					"command": "react-component-structure.helloWorld",
+					"command": "react-component-structure.refactor",
+					"group": "navigation",
+					"title": "Refactor to function"
+				},
+				{
+					"command": "react-component-structure.createComponent",
 					"group": "navigation",
 					"title": "New React component"
 				}
