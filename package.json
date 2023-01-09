@@ -2,7 +2,7 @@
 	"name": "react-component-structure",
 	"displayName": "React component structure",
 	"description": "Create basic strucrure for React component",
-	"version": "0.0.1",
+	"version": "1.0.1",
 	"publisher": "VitaliiVilianyk",
 	"engines": {
 		"vscode": "^1.74.0"
