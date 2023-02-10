@@ -2,8 +2,8 @@
 	"name": "react-component-structure",
 	"displayName": "React component structure",
 	"description": "Create basic strucrure for React component",
-	"icon": "./assets/react-icon-29.png",
-	"version": "1.0.1",
+	"icon": "assets/react-icon-29.png",
+	"version": "2.0.0",
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/Vitalii-Volianyk/VSC-React_component"
