@@ -3,6 +3,10 @@
 	"displayName": "React component structure",
 	"description": "Create basic strucrure for React component",
 	"version": "1.0.1",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/Vitalii-Volianyk/VSC-React_component"
+	},
 	"publisher": "VitaliiVilianyk",
 	"engines": {
 		"vscode": "^1.74.0"
@@ -38,6 +42,39 @@
 					"title": "New React component"
 				}
 			]
+		},
+		"configuration": {
+			"title": "React_component",
+			"properties": {
+				"react_component.extension": {
+					"type": "string",
+					"enum": [
+						"jsx",
+						"js"
+					],
+					"default": "jsx",
+					"description": "React file extension"
+				},
+				"react_component.styles": {
+					"type": "string",
+					"enum": [
+						"module",
+						"emotion",
+						"without"
+					],
+					"default": "module",
+					"description": "Type styles for component"
+				},
+				"react_component.reimport": {
+					"type": "boolean",
+					"enum": [
+						true,
+						false
+					],
+					"default": true,
+					"description": "Enable auto reimport component with index file"
+				}
+			}
 		}
 	},
 	"scripts": {

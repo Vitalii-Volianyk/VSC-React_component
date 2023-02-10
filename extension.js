@@ -16,7 +16,7 @@ function activate(context) {
 						.showInputBox({ placeHolder: "Component name" })
 						.then(val => {
 							if (val !== undefined) {
-								createComponent(val);
+								createComponentModule(val);
 							}
 						});
 				} else if (type == 1) {
@@ -26,7 +26,7 @@ function activate(context) {
 						.showInputBox({ placeHolder: "Component name" })
 						.then(val => {
 							if (val !== undefined) {
-								createComponent(val);
+								createComponentModule(val);
 							}
 						});
 				}
@@ -133,7 +133,7 @@ function activate(context) {
 	);
 	context.subscriptions.push(refactor);
 }
-function createComponent(name) {
+function createComponentModule(name) {
 	const param = name.split(".");
 	let config = "";
 	let writeStr = "";
@@ -141,43 +141,74 @@ function createComponent(name) {
 	if (param.length > 1) {
 		config = param[1];
 	}
+	const styles = vscode.workspace
+		.getConfiguration()
+		.get("react_component.styles");
 	const path = current_path + "/" + name;
 	vscode.workspace.fs.createDirectory(vscode.Uri.parse(path));
-	if (config == "c") {
-		writeStr = `import { Component } from 'react';
-import css from './${name}.module.css'
-
-class ${name} extends Component {
-  render() {
-    return <div></div>;
-  }
-}
-
-export default ${name};`;
+	if (config === "c") {
+		writeStr = getClassMarkup(name, styles);
+	} else if (config === "e") {
+		writeStr = getFuncMarkup(name, "without");
 	} else {
-		writeStr = `import css from './${name}.module.css'
-
-const ${name} = () => {
-	return <div></div>;	
-}
-
-export default ${name};`;
+		writeStr = getFuncMarkup(name, styles);
 	}
 	const writeData = Buffer.from(writeStr, "utf8");
 	vscode.workspace.fs.writeFile(
-		vscode.Uri.parse(path + "/" + name + ".jsx"),
+		vscode.Uri.parse(
+			path +
+				"/" +
+				name +
+				"." +
+				vscode.workspace
+					.getConfiguration()
+					.get("react_component.extension")
+		),
 		writeData
 	);
-	vscode.workspace.fs.writeFile(
-		vscode.Uri.parse(path + "/" + name + ".module.css"),
-		Buffer.from("", "utf8")
-	);
-	vscode.workspace.fs.writeFile(
-		vscode.Uri.parse(path + "/index.jsx"),
-		Buffer.from(`export { default } from './${name}';`, "utf8")
-	);
+	if (styles === "module") {
+		vscode.workspace.fs.writeFile(
+			vscode.Uri.parse(path + "/" + name + ".module.css"),
+			Buffer.from("", "utf8")
+		);
+	}
+	if (
+		vscode.workspace.getConfiguration().get("react_component.reimport") &&
+		config !== "e"
+	) {
+		vscode.workspace.fs.writeFile(
+			vscode.Uri.parse(
+				path +
+					"/index." +
+					vscode.workspace
+						.getConfiguration()
+						.get("react_component.extension")
+			),
+			Buffer.from(`export { default } from './${name}';`, "utf8")
+		);
+	}
 }
 function deactivate() {}
+
+function getClassMarkup(name, styles) {
+	if (styles === "module") {
+		return `import { Component } from 'react';\nimport css from './${name}.module.css'\nclass ${name} extends Component {\n\trender() {\n\t\treturn <div>${name}</div>;\n\t}\n}\nexport default ${name};`;
+	} else if (styles === "emotion") {
+		return `import { Component } from 'react';\nimport styled from '@emotion/styled'\nconst Container = styled.div\`\`;\nclass ${name} extends Component {\n\trender() {\n\t\treturn <Container>${name}</Container>;\n\t}\n}\nexport default ${name};`;
+	} else {
+		return `import { Component } from 'react';\nclass ${name} extends Component {\n\trender() {\n\t\treturn <div>${name}</div>;\n\t}\n}\nexport default ${name};`;
+	}
+}
+
+function getFuncMarkup(name, styles) {
+	if (styles === "module") {
+		return `import css from './${name}.module.css'\nconst ${name} = () => {\n\treturn <div>${name}</div>;\n}\nexport default ${name};`;
+	} else if (styles === "emotion") {
+		return `import styled from '@emotion/styled'\nconst Container = styled.div\`\`;\nconst ${name} = () => {\n\treturn <Container>${name}</Container>;\n}\nexport default ${name};`;
+	} else {
+		return `const ${name} = () => {\nreturn <div>${name}</div>;\n}\nexport default ${name};`;
+	}
+}
 
 module.exports = {
 	activate,

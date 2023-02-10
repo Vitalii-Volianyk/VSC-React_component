@@ -1,18 +1,36 @@
-var r=require("vscode"),g=require("fs"),h="";function S(s){let p=r.commands.registerCommand("react-component-structure.createComponent",function(o){r.workspace.fs.stat(o).then(({type:n})=>{n==2?(h=o,r.window.showInputBox({placeHolder:"Component name"}).then(c=>{c!==void 0&&x(c)})):n==1&&(h=r.Uri.parse(o).toString().split("/").slice(0,-1).join("/"),r.window.showInputBox({placeHolder:"Component name"}).then(l=>{l!==void 0&&x(l)}))})});s.subscriptions.push(p);let u=r.commands.registerCommand("react-component-structure.refactor",function(o){r.workspace.fs.stat(o).then(({type:n})=>{if(n==1){let c=o.fsPath,l=c.slice(-3);(l=="jsx"||l==".js")&&g.readFile(c,function(w,C){if(w){console.log(w);return}let e=C.toString();for(;e.search(/^\s*(\w*)\s*=\(?(.*)\)?=>\s*{([\s\S]*)}/gim)>-1;)e=e.replace(/^\s*(\w*)\s*=\(?(.*)\)?=>\s*{([\s\S]*)}/gim,"const $1 =($2)=> {$3}");let m=[];e=e.replace(/\s*this\.props\.(\w*)\(?.*\)?/gim,(f,t)=>(m.push(t),f));let j=m.length>0?`{${m.join(", ")}}`:"";e=e.replace(/class\s*(.*)\s*extends.*{([\s\S]*)}/gim,`const $1 =(${j})=> {$2}`),e=e.replace(/this\.props\./gim,"");let d={};e=e.replace(/\s*state\s*=\s*{((\s*.*,\s*)+\s*)}/gim,(f,t)=>(t=t.split(","),t=t.map(i=>i.trim()?i.split(":"):["",""]),t=t.map(i=>{let a=i[0].trim(),$=a.charAt(0).toUpperCase()+a.slice(1);return a?(d[a]="set"+$,`
-const [${a}, set${$}] = useState(${i[1].trim()})`):""}),t[t.length-1]==""&&t.pop(),t.join("; "))),e=e.replace(/this\.setState\({(.*)}\)/gim,(f,t)=>(t=t.split(","),t=t.map(i=>i.split(":")),t=t.map(i=>{let a=i[0].trim();if(d[a])return`${d[a]}(${i[1].trim()})`}),t.join(`;
-`))),e=e.replace(/this\./gim,""),g.writeFile(c,e,function(f){if(f)return console.error(f);console.log("Data written successfully!")})})}})});s.subscriptions.push(u)}function x(s){let p=s.split("."),u="",o="";s=p[0],p.length>1&&(u=p[1]);let n=h+"/"+s;r.workspace.fs.createDirectory(r.Uri.parse(n)),u=="c"?o=`import { Component } from 'react';
-import css from './${s}.module.css'
-
-class ${s} extends Component {
-  render() {
-    return <div></div>;
-  }
+var r=require("vscode"),w=require("fs"),$="";function S(t){let s=r.commands.registerCommand("react-component-structure.createComponent",function(i){r.workspace.fs.stat(i).then(({type:p})=>{p==2?($=i,r.window.showInputBox({placeHolder:"Component name"}).then(o=>{o!==void 0&&C(o)})):p==1&&($=r.Uri.parse(i).toString().split("/").slice(0,-1).join("/"),r.window.showInputBox({placeHolder:"Component name"}).then(u=>{u!==void 0&&C(u)}))})});t.subscriptions.push(s);let a=r.commands.registerCommand("react-component-structure.refactor",function(i){r.workspace.fs.stat(i).then(({type:p})=>{if(p==1){let o=i.fsPath,u=o.slice(-3);(u=="jsx"||u==".js")&&w.readFile(o,function(g,k){if(g){console.log(g);return}let n=k.toString();for(;n.search(/^\s*(\w*)\s*=\(?(.*)\)?=>\s*{([\s\S]*)}/gim)>-1;)n=n.replace(/^\s*(\w*)\s*=\(?(.*)\)?=>\s*{([\s\S]*)}/gim,"const $1 =($2)=> {$3}");let d=[];n=n.replace(/\s*this\.props\.(\w*)\(?.*\)?/gim,(l,e)=>(d.push(e),l));let v=d.length>0?`{${d.join(", ")}}`:"";n=n.replace(/class\s*(.*)\s*extends.*{([\s\S]*)}/gim,`const $1 =(${v})=> {$2}`),n=n.replace(/this\.props\./gim,"");let m={};n=n.replace(/\s*state\s*=\s*{((\s*.*,\s*)+\s*)}/gim,(l,e)=>(e=e.split(","),e=e.map(c=>c.trim()?c.split(":"):["",""]),e=e.map(c=>{let f=c[0].trim(),h=f.charAt(0).toUpperCase()+f.slice(1);return f?(m[f]="set"+h,`
+const [${f}, set${h}] = useState(${c[1].trim()})`):""}),e[e.length-1]==""&&e.pop(),e.join("; "))),n=n.replace(/this\.setState\({(.*)}\)/gim,(l,e)=>(e=e.split(","),e=e.map(c=>c.split(":")),e=e.map(c=>{let f=c[0].trim();if(m[f])return`${m[f]}(${c[1].trim()})`}),e.join(`;
+`))),n=n.replace(/this\./gim,""),w.writeFile(o,n,function(l){if(l)return console.error(l);console.log("Data written successfully!")})})}})});t.subscriptions.push(a)}function C(t){let s=t.split("."),a="",i="";t=s[0],s.length>1&&(a=s[1]);let p=r.workspace.getConfiguration().get("react_component.styles"),o=$+"/"+t;r.workspace.fs.createDirectory(r.Uri.parse(o)),a==="c"?i=j(t,p):a==="e"?i=x(t,"without"):i=x(t,p);let u=Buffer.from(i,"utf8");r.workspace.fs.writeFile(r.Uri.parse(o+"/"+t+"."+r.workspace.getConfiguration().get("react_component.extension")),u),p==="module"&&r.workspace.fs.writeFile(r.Uri.parse(o+"/"+t+".module.css"),Buffer.from("","utf8")),r.workspace.getConfiguration().get("react_component.reimport")&&a!=="e"&&r.workspace.fs.writeFile(r.Uri.parse(o+"/index."+r.workspace.getConfiguration().get("react_component.extension")),Buffer.from(`export { default } from './${t}';`,"utf8"))}function y(){}function j(t,s){return s==="module"?`import { Component } from 'react';
+import css from './${t}.module.css'
+class ${t} extends Component {
+	render() {
+		return <div>${t}</div>;
+	}
 }
-
-export default ${s};`:o=`import css from './${s}.module.css'
-
-const ${s} = () => {
-	return <div></div>;	
+export default ${t};`:s==="emotion"?`import { Component } from 'react';
+import styled from '@emotion/styled'
+const Container = styled.div\`\`;
+class ${t} extends Component {
+	render() {
+		return <Container>${t}</Container>;
+	}
 }
-
-export default ${s};`;let c=Buffer.from(o,"utf8");r.workspace.fs.writeFile(r.Uri.parse(n+"/"+s+".jsx"),c),r.workspace.fs.writeFile(r.Uri.parse(n+"/"+s+".module.css"),Buffer.from("","utf8")),r.workspace.fs.writeFile(r.Uri.parse(n+"/index.jsx"),Buffer.from(`export { default } from './${s}';`,"utf8"))}function k(){}module.exports={activate:S,deactivate:k};
+export default ${t};`:`import { Component } from 'react';
+class ${t} extends Component {
+	render() {
+		return <div>${t}</div>;
+	}
+}
+export default ${t};`}function x(t,s){return s==="module"?`import css from './${t}.module.css'
+const ${t} = () => {
+	return <div>${t}</div>;
+}
+export default ${t};`:s==="emotion"?`import styled from '@emotion/styled'
+const Container = styled.div\`\`;
+const ${t} = () => {
+	return <Container>${t}</Container>;
+}
+export default ${t};`:`const ${t} = () => {
+return <div>${t}</div>;
+}
+export default ${t};`}module.exports={activate:S,deactivate:y};
