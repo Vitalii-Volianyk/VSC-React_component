@@ -1,15 +1,15 @@
-var r=require("vscode"),w=require("fs"),$="";function S(t){let s=r.commands.registerCommand("react-component-structure.createComponent",function(i){r.workspace.fs.stat(i).then(({type:p})=>{p==2?($=i,r.window.showInputBox({placeHolder:"Component name"}).then(o=>{o!==void 0&&C(o)})):p==1&&($=r.Uri.parse(i).toString().split("/").slice(0,-1).join("/"),r.window.showInputBox({placeHolder:"Component name"}).then(u=>{u!==void 0&&C(u)}))})});t.subscriptions.push(s);let a=r.commands.registerCommand("react-component-structure.refactor",function(i){r.workspace.fs.stat(i).then(({type:p})=>{if(p==1){let o=i.fsPath,u=o.slice(-3);(u=="jsx"||u==".js")&&w.readFile(o,function(g,k){if(g){console.log(g);return}let n=k.toString();for(;n.search(/^\s*(\w*)\s*=\(?(.*)\)?=>\s*{([\s\S]*)}/gim)>-1;)n=n.replace(/^\s*(\w*)\s*=\(?(.*)\)?=>\s*{([\s\S]*)}/gim,"const $1 =($2)=> {$3}");let d=[];n=n.replace(/\s*this\.props\.(\w*)\(?.*\)?/gim,(l,e)=>(d.push(e),l));let v=d.length>0?`{${d.join(", ")}}`:"";n=n.replace(/class\s*(.*)\s*extends.*{([\s\S]*)}/gim,`const $1 =(${v})=> {$2}`),n=n.replace(/this\.props\./gim,"");let m={};n=n.replace(/\s*state\s*=\s*{((\s*.*,\s*)+\s*)}/gim,(l,e)=>(e=e.split(","),e=e.map(c=>c.trim()?c.split(":"):["",""]),e=e.map(c=>{let f=c[0].trim(),h=f.charAt(0).toUpperCase()+f.slice(1);return f?(m[f]="set"+h,`
-const [${f}, set${h}] = useState(${c[1].trim()})`):""}),e[e.length-1]==""&&e.pop(),e.join("; "))),n=n.replace(/this\.setState\({(.*)}\)/gim,(l,e)=>(e=e.split(","),e=e.map(c=>c.split(":")),e=e.map(c=>{let f=c[0].trim();if(m[f])return`${m[f]}(${c[1].trim()})`}),e.join(`;
-`))),n=n.replace(/this\./gim,""),w.writeFile(o,n,function(l){if(l)return console.error(l);console.log("Data written successfully!")})})}})});t.subscriptions.push(a)}function C(t){let s=t.split("."),a="",i="";t=s[0],s.length>1&&(a=s[1]);let p=r.workspace.getConfiguration().get("react_component.styles"),o=$+"/"+t;r.workspace.fs.createDirectory(r.Uri.parse(o)),a==="c"?i=j(t,p):a==="e"?i=x(t,"without"):i=x(t,p);let u=Buffer.from(i,"utf8");r.workspace.fs.writeFile(r.Uri.parse(o+"/"+t+"."+r.workspace.getConfiguration().get("react_component.extension")),u),p==="module"&&r.workspace.fs.writeFile(r.Uri.parse(o+"/"+t+".module.css"),Buffer.from("","utf8")),r.workspace.getConfiguration().get("react_component.reimport")&&a!=="e"&&r.workspace.fs.writeFile(r.Uri.parse(o+"/index."+r.workspace.getConfiguration().get("react_component.extension")),Buffer.from(`export { default } from './${t}';`,"utf8"))}function y(){}function j(t,s){return s==="module"?`import { Component } from 'react';
+var e=require("vscode"),m=require("fs"),c="";function d(t){let n=e.commands.registerCommand("react-component-structure.createComponent",function(o){e.workspace.fs.stat(o).then(({type:r})=>{r==2?(c=o,e.window.showInputBox({placeHolder:"Component name"}).then(i=>{i!==void 0&&p(i)})):r==1&&(c=e.Uri.parse(o).toString().split("/").slice(0,-1).join("/"),e.window.showInputBox({placeHolder:"Component name"}).then(s=>{s!==void 0&&p(s)}))})});t.subscriptions.push(n)}function p(t){let n=t.split("."),o="",r="";t=n[0],n.length>1&&(o=n[1]);let i=e.workspace.getConfiguration().get("react_component.styles"),s=c+"/"+t;e.workspace.fs.createDirectory(e.Uri.parse(s)),o==="c"?r=a(t,i):o==="e"?r=f(t,"without"):r=f(t,i);let u=Buffer.from(r,"utf8");e.workspace.fs.writeFile(e.Uri.parse(s+"/"+t+"."+e.workspace.getConfiguration().get("react_component.extension")),u),i==="module"&&e.workspace.fs.writeFile(e.Uri.parse(s+"/"+t+".module.css"),Buffer.from("","utf8")),e.workspace.getConfiguration().get("react_component.reimport")&&o!=="e"&&e.workspace.fs.writeFile(e.Uri.parse(s+"/index."+e.workspace.getConfiguration().get("react_component.extension")),Buffer.from(`export { default } from './${t}';`,"utf8"))}function l(){}function a(t,n){return n==="module"?`import { Component } from 'react';
 import css from './${t}.module.css'
 class ${t} extends Component {
 	render() {
 		return <div>${t}</div>;
 	}
 }
-export default ${t};`:s==="emotion"?`import { Component } from 'react';
-import styled from '@emotion/styled'
+export default ${t};`:n==="emotion"?`import { Component } from 'react';
+import styled from '@emotion/styled';
+
 const Container = styled.div\`\`;
+
 class ${t} extends Component {
 	render() {
 		return <Container>${t}</Container>;
@@ -21,16 +21,18 @@ class ${t} extends Component {
 		return <div>${t}</div>;
 	}
 }
-export default ${t};`}function x(t,s){return s==="module"?`import css from './${t}.module.css'
+export default ${t};`}function f(t,n){return n==="module"?`import css from './${t}.module.css'
 const ${t} = () => {
 	return <div>${t}</div>;
 }
-export default ${t};`:s==="emotion"?`import styled from '@emotion/styled'
+export default ${t};`:n==="emotion"?`import styled from '@emotion/styled';
+
 const Container = styled.div\`\`;
+
 const ${t} = () => {
 	return <Container>${t}</Container>;
 }
 export default ${t};`:`const ${t} = () => {
 return <div>${t}</div>;
 }
-export default ${t};`}module.exports={activate:S,deactivate:y};
+export default ${t};`}module.exports={activate:d,deactivate:l};

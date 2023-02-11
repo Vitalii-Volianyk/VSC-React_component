@@ -34,104 +34,104 @@ function activate(context) {
 		}
 	);
 	context.subscriptions.push(disposable);
-	let refactor = vscode.commands.registerCommand(
-		"react-component-structure.refactor",
-		function (url) {
-			vscode.workspace.fs.stat(url).then(({ type }) => {
-				if (type == 1) {
-					const path = url.fsPath;
-					const ext = path.slice(-3);
-					if (ext == "jsx" || ext == ".js") {
-						fs.readFile(path, function (err, data) {
-							if (err) {
-								console.log(err);
-								return;
-							}
-							let text = data.toString();
-							while (
-								text.search(
-									/^\s*(\w*)\s*=\(?(.*)\)?=>\s*{([\s\S]*)}/gim
-								) > -1
-							) {
-								text = text.replace(
-									/^\s*(\w*)\s*=\(?(.*)\)?=>\s*{([\s\S]*)}/gim,
-									"const $1 =($2)=> {$3}"
-								);
-							}
-							let props = [];
-							text = text.replace(
-								/\s*this\.props\.(\w*)\(?.*\)?/gim,
-								(p0, p1) => {
-									props.push(p1);
-									return p0;
-								}
-							);
-							const pp =
-								props.length > 0 ? `{${props.join(", ")}}` : "";
-							text = text.replace(
-								/class\s*(.*)\s*extends.*{([\s\S]*)}/gim,
-								`const $1 =(${pp})=> {$2}`
-							);
-							text = text.replace(/this\.props\./gim, "");
-							let states = {};
-							text = text.replace(
-								/\s*state\s*=\s*{((\s*.*,\s*)+\s*)}/gim,
-								(match, p1) => {
-									p1 = p1.split(",");
-									p1 = p1.map(el => {
-										if (el.trim()) {
-											return el.split(":");
-										}
-										return ["", ""];
-									});
-									p1 = p1.map(el => {
-										let name = el[0].trim();
-										const func =
-											name.charAt(0).toUpperCase() +
-											name.slice(1);
-										if (name) {
-											states[name] = "set" + func;
-											return `\nconst [${name}, set${func}] = useState(${el[1].trim()})`;
-										}
-										return "";
-									});
-									if (p1[p1.length - 1] == "") {
-										p1.pop();
-									}
-									return p1.join("; ");
-								}
-							);
-							text = text.replace(
-								/this\.setState\({(.*)}\)/gim,
-								(match, p1) => {
-									p1 = p1.split(",");
-									p1 = p1.map(el => el.split(":"));
-									p1 = p1.map(el => {
-										let name = el[0].trim();
-										if (states[name]) {
-											return `${
-												states[name]
-											}(${el[1].trim()})`;
-										}
-									});
-									return p1.join(";\n");
-								}
-							);
+	// let refactor = vscode.commands.registerCommand(
+	// 	"react-component-structure.refactor",
+	// 	function (url) {
+	// 		vscode.workspace.fs.stat(url).then(({ type }) => {
+	// 			if (type == 1) {
+	// 				const path = url.fsPath;
+	// 				const ext = path.slice(-3);
+	// 				if (ext == "jsx" || ext == ".js") {
+	// 					fs.readFile(path, function (err, data) {
+	// 						if (err) {
+	// 							console.log(err);
+	// 							return;
+	// 						}
+	// 						let text = data.toString();
+	// 						while (
+	// 							text.search(
+	// 								/^\s*(\w*)\s*=\(?(.*)\)?=>\s*{([\s\S]*)}/gim
+	// 							) > -1
+	// 						) {
+	// 							text = text.replace(
+	// 								/^\s*(\w*)\s*=\(?(.*)\)?=>\s*{([\s\S]*)}/gim,
+	// 								"const $1 =($2)=> {$3}"
+	// 							);
+	// 						}
+	// 						let props = [];
+	// 						text = text.replace(
+	// 							/\s*this\.props\.(\w*)\(?.*\)?/gim,
+	// 							(p0, p1) => {
+	// 								props.push(p1);
+	// 								return p0;
+	// 							}
+	// 						);
+	// 						const pp =
+	// 							props.length > 0 ? `{${props.join(", ")}}` : "";
+	// 						text = text.replace(
+	// 							/class\s*(.*)\s*extends.*{([\s\S]*)}/gim,
+	// 							`const $1 =(${pp})=> {$2}`
+	// 						);
+	// 						text = text.replace(/this\.props\./gim, "");
+	// 						let states = {};
+	// 						text = text.replace(
+	// 							/\s*state\s*=\s*{((\s*.*,\s*)+\s*)}/gim,
+	// 							(match, p1) => {
+	// 								p1 = p1.split(",");
+	// 								p1 = p1.map(el => {
+	// 									if (el.trim()) {
+	// 										return el.split(":");
+	// 									}
+	// 									return ["", ""];
+	// 								});
+	// 								p1 = p1.map(el => {
+	// 									let name = el[0].trim();
+	// 									const func =
+	// 										name.charAt(0).toUpperCase() +
+	// 										name.slice(1);
+	// 									if (name) {
+	// 										states[name] = "set" + func;
+	// 										return `\nconst [${name}, set${func}] = useState(${el[1].trim()})`;
+	// 									}
+	// 									return "";
+	// 								});
+	// 								if (p1[p1.length - 1] == "") {
+	// 									p1.pop();
+	// 								}
+	// 								return p1.join("; ");
+	// 							}
+	// 						);
+	// 						text = text.replace(
+	// 							/this\.setState\({(.*)}\)/gim,
+	// 							(match, p1) => {
+	// 								p1 = p1.split(",");
+	// 								p1 = p1.map(el => el.split(":"));
+	// 								p1 = p1.map(el => {
+	// 									let name = el[0].trim();
+	// 									if (states[name]) {
+	// 										return `${
+	// 											states[name]
+	// 										}(${el[1].trim()})`;
+	// 									}
+	// 								});
+	// 								return p1.join(";\n");
+	// 							}
+	// 						);
 
-							text = text.replace(/this\./gim, "");
-							fs.writeFile(path, text, function (err) {
-								if (err) {
-									return console.error(err);
-								}
-								console.log("Data written successfully!");
-							});
-						});
-					}
-				}
-			});
-		}
-	);
-	context.subscriptions.push(refactor);
+	// 						text = text.replace(/this\./gim, "");
+	// 						fs.writeFile(path, text, function (err) {
+	// 							if (err) {
+	// 								return console.error(err);
+	// 							}
+	// 							console.log("Data written successfully!");
+	// 						});
+	// 					});
+	// 				}
+	// 			}
+	// 		});
+	// 	}
+	// );
+	// context.subscriptions.push(refactor);
 }
 function createComponentModule(name) {
 	const param = name.split(".");
@@ -194,7 +194,7 @@ function getClassMarkup(name, styles) {
 	if (styles === "module") {
 		return `import { Component } from 'react';\nimport css from './${name}.module.css'\nclass ${name} extends Component {\n\trender() {\n\t\treturn <div>${name}</div>;\n\t}\n}\nexport default ${name};`;
 	} else if (styles === "emotion") {
-		return `import { Component } from 'react';\nimport styled from '@emotion/styled'\nconst Container = styled.div\`\`;\nclass ${name} extends Component {\n\trender() {\n\t\treturn <Container>${name}</Container>;\n\t}\n}\nexport default ${name};`;
+		return `import { Component } from 'react';\nimport styled from '@emotion/styled';\n\nconst Container = styled.div\`\`;\n\nclass ${name} extends Component {\n\trender() {\n\t\treturn <Container>${name}</Container>;\n\t}\n}\nexport default ${name};`;
 	} else {
 		return `import { Component } from 'react';\nclass ${name} extends Component {\n\trender() {\n\t\treturn <div>${name}</div>;\n\t}\n}\nexport default ${name};`;
 	}
@@ -204,7 +204,7 @@ function getFuncMarkup(name, styles) {
 	if (styles === "module") {
 		return `import css from './${name}.module.css'\nconst ${name} = () => {\n\treturn <div>${name}</div>;\n}\nexport default ${name};`;
 	} else if (styles === "emotion") {
-		return `import styled from '@emotion/styled'\nconst Container = styled.div\`\`;\nconst ${name} = () => {\n\treturn <Container>${name}</Container>;\n}\nexport default ${name};`;
+		return `import styled from '@emotion/styled';\n\nconst Container = styled.div\`\`;\n\nconst ${name} = () => {\n\treturn <Container>${name}</Container>;\n}\nexport default ${name};`;
 	} else {
 		return `const ${name} = () => {\nreturn <div>${name}</div>;\n}\nexport default ${name};`;
 	}
