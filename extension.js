@@ -6,14 +6,42 @@ const fs = require("fs");
 let current_path = "";
 
 function activate(context) {
-	let disposable = vscode.commands.registerCommand(
-		"react-component-structure.createComponent",
+	let component = vscode.commands.registerCommand(
+		"react-component-structure.createEmotionComponent",
 		function (url) {
-			vscode.workspace.fs.stat(url).then(({ type }) => {
+			vscode.workspace.fs.stat(url).then(({type}) => {
 				if (type == 2) {
 					current_path = url;
 					vscode.window
-						.showInputBox({ placeHolder: "Component name" })
+						.showInputBox({placeHolder: "Component name"})
+						.then(val => {
+							if (val !== undefined) {
+								createComponentEmotion(val);
+							}
+						});
+				} else if (type == 1) {
+					let path = vscode.Uri.parse(url).toString().split("/");
+					current_path = path.slice(0, -1).join("/");
+					vscode.window
+						.showInputBox({placeHolder: "Component name"})
+						.then(val => {
+							if (val !== undefined) {
+								createComponentEmotion(val);
+							}
+						});
+				}
+			});
+		}
+	);
+	context.subscriptions.push(component);
+	let disposable = vscode.commands.registerCommand(
+		"react-component-structure.createComponent",
+		function (url) {
+			vscode.workspace.fs.stat(url).then(({type}) => {
+				if (type == 2) {
+					current_path = url;
+					vscode.window
+						.showInputBox({placeHolder: "Component name"})
 						.then(val => {
 							if (val !== undefined) {
 								createComponentModule(val);
@@ -23,7 +51,7 @@ function activate(context) {
 					let path = vscode.Uri.parse(url).toString().split("/");
 					current_path = path.slice(0, -1).join("/");
 					vscode.window
-						.showInputBox({ placeHolder: "Component name" })
+						.showInputBox({placeHolder: "Component name"})
 						.then(val => {
 							if (val !== undefined) {
 								createComponentModule(val);
@@ -133,6 +161,43 @@ function activate(context) {
 	// );
 	// context.subscriptions.push(refactor);
 }
+
+function createComponentEmotion(name) {
+	const param = name.split(".");
+	let config = "";
+	let writeStr = "";
+	name = param[0];
+	const path = current_path + "/" + name;
+	vscode.workspace.fs.createDirectory(vscode.Uri.parse(path));
+
+	const writeData = Buffer.from(
+		`import { ${param[1]} } from './${name}.styled';
+
+export const ${name} = () => {
+  return <${param[1]}></${param[1]}>;
+};`,
+		"utf8"
+	);
+	vscode.workspace.fs.writeFile(
+		vscode.Uri.parse(path + "/" + name + ".jsx"),
+		writeData
+	);
+
+	vscode.workspace.fs.writeFile(
+		vscode.Uri.parse(path + "/" + name + ".styled.js"),
+		Buffer.from(
+			`import styled from '@emotion/styled';
+
+export const ${param[1]} = styled.${param[2]}\`\`;`,
+			"utf8"
+		)
+	);
+	vscode.workspace.fs.writeFile(
+		vscode.Uri.parse(path + "/index.jsx"),
+		Buffer.from(`export * from "./${param[2]}";`, "utf8")
+	);
+}
+
 function createComponentModule(name) {
 	const param = name.split(".");
 	let config = "";
