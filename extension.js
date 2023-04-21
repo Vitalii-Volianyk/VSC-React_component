@@ -164,11 +164,10 @@ function activate(context) {
 
 function createComponentEmotion(name) {
 	const param = name.split(".");
-	let config = "";
-	let writeStr = "";
 	name = param[0];
 	const StyledName =
-		param[2].charAt(0).toUpperCase() + param[2].slice(1) + "Styled";
+		param[1].charAt(0).toUpperCase() + param[1].slice(1) + "Styled";
+	console.log(StyledName);
 	const path = current_path + "/" + name;
 	vscode.workspace.fs.createDirectory(vscode.Uri.parse(path));
 
@@ -190,7 +189,7 @@ export const ${name} = () => {
 		Buffer.from(
 			`import styled from '@emotion/styled';
 
-export const ${StyledName} = styled.${param[2]}\`\`;`,
+export const ${StyledName} = styled.${param[1]}\`\`;`,
 			"utf8"
 		)
 	);
