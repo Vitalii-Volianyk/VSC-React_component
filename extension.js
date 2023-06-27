@@ -1,5 +1,4 @@
 const vscode = require("vscode");
-const fs = require("fs");
 /**
  * @param {vscode.ExtensionContext} context
  */
@@ -33,7 +32,35 @@ function activate(context) {
 			});
 		}
 	);
+	let componentNative = vscode.commands.registerCommand(
+		"react-component-structure.createNativeComponent",
+		function (url) {
+			vscode.workspace.fs.stat(url).then(({type}) => {
+				if (type == 2) {
+					current_path = url;
+					vscode.window
+						.showInputBox({placeHolder: "Component name"})
+						.then(val => {
+							if (val !== undefined) {
+								createComponentNative(val);
+							}
+						});
+				} else if (type == 1) {
+					let path = vscode.Uri.parse(url).toString().split("/");
+					current_path = path.slice(0, -1).join("/");
+					vscode.window
+						.showInputBox({placeHolder: "Component name"})
+						.then(val => {
+							if (val !== undefined) {
+								createComponentNative(val);
+							}
+						});
+				}
+			});
+		}
+	);
 	context.subscriptions.push(component);
+	context.subscriptions.push(componentNative);
 	let disposable = vscode.commands.registerCommand(
 		"react-component-structure.createComponent",
 		function (url) {
@@ -274,6 +301,49 @@ function getFuncMarkup(name, styles) {
 	} else {
 		return `const ${name} = () => {\nreturn <div>${name}</div>;\n}\nexport default ${name};`;
 	}
+}
+
+function createComponentNative(name) {
+	const path = current_path + "/" + name;
+	vscode.workspace.fs.createDirectory(vscode.Uri.parse(path));
+	const writeData = Buffer.from(
+		`import {View, Text} from "react-native";
+import styles from "./${name}.styled";
+
+export default function ${name}() {
+	  return (
+	<View style={styles.container}>
+	  <Text style={styles.text}>${name}</Text>
+	</View>
+  );
+}
+`,
+		"utf8"
+	);
+	vscode.workspace.fs.writeFile(
+		vscode.Uri.parse(path + "/" + name + ".js"),
+		writeData
+	);
+	vscode.workspace.fs.writeFile(
+		vscode.Uri.parse(path + "/index.js"),
+		Buffer.from(`export * from "./${name}";`, "utf8")
+	);
+	vscode.workspace.fs.writeFile(
+		vscode.Uri.parse(path + "/" + name + ".styled.js"),
+		Buffer.from(
+			`import {StyleSheet} from "react-native";
+
+export const styles = StyleSheet.create({
+	container: {
+		flex: 1,
+	},
+	text: {
+		fontSize: 20,
+	},
+});`,
+			"utf8"
+		)
+	);
 }
 
 module.exports = {

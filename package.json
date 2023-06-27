@@ -3,7 +3,7 @@
 	"displayName": "React component structure",
 	"description": "Create basic strucrure for React component",
 	"icon": "assets/react-icon-29.png",
-	"version": "2.8.6",
+	"version": "3.0.1",
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/Vitalii-Volianyk/VSC-React_component"
@@ -23,11 +23,15 @@
 		"commands": [
 			{
 				"command": "react-component-structure.createComponent",
-				"title": "New React component"
+				"title": "New ReactJS component"
 			},
 			{
 				"command": "react-component-structure.createEmotionComponent",
-				"title": "New React Emotion component"
+				"title": "New ReactJS Emotion component"
+			},
+			{
+				"command": "react-component-structure.createNativeComponent",
+				"title": "New React Native component"
 			}
 		],
 		"menus": {
@@ -35,12 +39,17 @@
 				{
 					"command": "react-component-structure.createEmotionComponent",
 					"group": "navigation",
-					"title": "New React Emotion component"
+					"title": "New ReactJS Emotion component"
 				},
 				{
 					"command": "react-component-structure.createComponent",
 					"group": "navigation",
-					"title": "New React component"
+					"title": "New ReactJS component"
+				},
+				{
+					"command": "react-component-structure.createNativeComponent",
+					"group": "navigation",
+					"title": "New React Native component"
 				}
 			]
 		},
