@@ -34,45 +34,42 @@ function activate(context) {
 			);
 
 			const cssStyle = panel.webview.asWebviewUri(
-				vscode.Uri.joinPath(context.extensionUri, "media", "ext.css")
+				vscode.Uri.joinPath(
+					context.extensionUri,
+					"media/static/css/main.f855e6bc.css"
+				)
 			);
 			const scriptPath = panel.webview.asWebviewUri(
-				vscode.Uri.joinPath(context.extensionUri, "media", "ext.js")
+				vscode.Uri.joinPath(
+					context.extensionUri,
+					"media/static/js/main.ecb86387.js"
+				)
 			);
 			const webview = panel.webview;
-			const html = `<!DOCTYPE html>
-					<html lang="en">
-					<head>
-					  <meta charset="UTF-8">
-					  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-					  <meta
-						  http-equiv="Content-Security-Policy" content="default-src 'none'; img-src ${
-								webview.cspSource
-							} https:; script-src ${
-				webview.cspSource
-			} 'self' 'unsafe-inline'; style-src ${webview.cspSource};"
-						/>
-					  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-					  <link rel="stylesheet" type="text/css" href="${cssStyle}" />
-					  <script src="${scriptPath}"></script>
-					  <title>Edit Structure</title>
-					</head>
-					<body>
-					  <h1>Edit Structure</h1>
-					  <h2>Current Structure</h2>
-					  <p>${path}</p>
-					  <h2>Workspace</h2>
-					  <p>${vscode.workspace.getWorkspaceFolder(url).name}</p>
-					  <h2>Relative Path</h2>
-					  <p>${vscode.workspace.asRelativePath(url)}</p>
-					  <form action="">
-						<label for="structure">Structure</label>
-						<input type="text" name="structure" id="structure" />
-						<button type="button" onclick="FormSubmit()">Save</button>
-					  </form>
-					   
-					</body>
-					</html>`;
+			const html = `
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" href="/favicon.ico" />
+		<meta name="viewport" content="width=device-width,initial-scale=1" />
+		<meta name="theme-color" content="#000000" />
+		<meta http-equiv="Content-Security-Policy" content="default-src ${webview.cspSource}; img-src ${webview.cspSource} https:; script-src ${webview.cspSource} 'self' 'unsafe-inline'; style-src ${webview.cspSource};"/>			 
+		<meta
+			name="description"
+			content="Web site created using create-react-app"
+		/>
+		<link rel="apple-touch-icon" href="/logo192.png" />
+		<link rel="manifest" href="/manifest.json" />
+		<title>React App</title>
+		<link rel="stylesheet" type="text/css" href="${cssStyle}" />
+		</head>
+		<body>
+		<noscript>You need to enable JavaScript to run this app.</noscript>
+		<div id="root"></div>
+		<script src="${scriptPath}"></script>
+	</body>
+</html>`;
 			panel.webview.html = html;
 		}
 	);
