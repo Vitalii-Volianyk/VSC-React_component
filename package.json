@@ -1,9 +1,9 @@
 {
 	"name": "react-component-structure",
-	"displayName": "React component structure",
-	"description": "Create basic strucrure for React component",
+	"displayName": "React project structure",
+	"description": "Create basic structure for ReactJS/NextJS project",
 	"icon": "assets/react-icon-29.png",
-	"version": "3.5.1",
+	"version": "4.0.1",
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/Vitalii-Volianyk/VSC-React_component"
@@ -22,34 +22,16 @@
 	"contributes": {
 		"commands": [
 			{
-				"command": "react-component-structure.createComponent",
-				"title": "New ReactJS component"
-			},
-			{
-				"command": "react-component-structure.createEmotionComponent",
-				"title": "New ReactJS Emotion component"
-			},
-			{
-				"command": "react-component-structure.createNativeComponent",
-				"title": "New React Native component"
+				"command": "react-component-structure.editStructure",
+				"title": "Edit project structure"
 			}
 		],
 		"menus": {
 			"explorer/context": [
 				{
-					"command": "react-component-structure.createEmotionComponent",
+					"command": "react-component-structure.editStructure",
 					"group": "navigation",
 					"title": "New ReactJS Emotion component"
-				},
-				{
-					"command": "react-component-structure.createComponent",
-					"group": "navigation",
-					"title": "New ReactJS component"
-				},
-				{
-					"command": "react-component-structure.createNativeComponent",
-					"group": "navigation",
-					"title": "New React Native component"
 				}
 			]
 		},
