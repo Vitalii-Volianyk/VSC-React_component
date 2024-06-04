@@ -1,6 +1,17 @@
+import { useEffect } from "react";
 import "./App.css";
 
 function App() {
+	useEffect(() => {
+		window.addEventListener("message", (event) => {
+			const message = event.data;
+
+			if (message.command === "refactor") {
+				console.log(message);
+			}
+		});
+	}, []);
+
 	return (
 		<div className="bg-gradient-to-r from-blue-600 to-purple-500 p-10">
 			<p className="text-white/80 text-xl font-semibold">
