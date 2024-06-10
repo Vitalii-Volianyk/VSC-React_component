@@ -6,6 +6,7 @@ import Route from "./Route";
 
 function App() {
 	const [structure, setStructure] = useState(Code);
+	const [path, setPath] = useState([]);
 	useEffect(() => {
 		window.addEventListener("message", (event) => {
 			const message = event.data;
@@ -18,9 +19,19 @@ function App() {
 		});
 	}, []);
 
+	const addPath = (newPath) => {
+		setPath([...path, newPath]);
+	};
+
+	const save = () => {
+		setPath([]);
+		// window.parent.postMessage({ command: "addPath" }, "*");
+	};
+
 	return (
 		<div>
-			<Route folders={structure.folders} />
+			<Route addPath={addPath} folders={structure.folders} />
+			<button onClick={save}>Save</button>
 		</div>
 	);
 }
