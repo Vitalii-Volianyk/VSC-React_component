@@ -1,7 +1,38 @@
+const { read } = require("fs");
 const vscode = require("vscode");
-/**
- * @param {vscode.ExtensionContext} context
- */
+
+async function getSubFolders(path, file) {
+	let folder = {};
+	if (file[1] === 2) {
+		const res = await readFolders(path + "/" + file[0]);
+		folder = {
+			path: path + "/" + file[0],
+			name: file[0],
+			folders: res,
+		};
+	}
+	return folder;
+}
+
+async function readFolders(path) {
+	let folders = {};
+
+	const files = await vscode.workspace.fs.readDirectory(vscode.Uri.parse(path));
+
+	for (let i = 0; i < files.length; i++) {
+		const file = files[i];
+		if (file[1] === 2) {
+			folders[file[0]] = await getSubFolders(path, file);
+		}
+	}
+
+	return folders;
+}
+
+function writeFile(path, writeStr) {
+	const writeData = Buffer.from(writeStr, "utf8");
+	vscode.workspace.fs.writeFile(vscode.Uri.parse(path), writeData);
+}
 
 function activate(context) {
 	let disposable = vscode.commands.registerCommand(
@@ -9,25 +40,20 @@ function activate(context) {
 		function (url) {
 			let project = {
 				rootPath: url.path,
-				folders: [],
+				folders: {},
 			};
 
-			const path = url.path;
-			console.log(path);
-
-			vscode.workspace.fs
-				.readDirectory(vscode.Uri.parse(project.rootPath + "/API/3cltr"))
-				.then((files) => {
-					files.forEach((file) => {
-						console.log(file);
-					});
+			readFolders(url.path)
+				.then((res) => {
+					project.folders = res;
+					console.log(JSON.stringify(project, null, 4));
 				})
 				.catch((error) => {
 					console.log(error);
-				})
-				.finally(() => {
-					console.log("finally");
 				});
+
+			const path = url.path;
+			console.log(path);
 
 			const panel = vscode.window.createWebviewPanel(
 				"editStructure",
