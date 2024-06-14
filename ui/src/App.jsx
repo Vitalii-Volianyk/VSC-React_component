@@ -1,35 +1,63 @@
 import { useEffect } from "react";
 import { useState } from "react";
+import Lodash from "lodash";
 import "./App.css";
 import Code from "./code";
-import Route from "./Route";
+import Route from "./Components/Route";
+import Types from "./Components/Types";
 
 function App() {
 	const [structure, setStructure] = useState(Code);
 	const [path, setPath] = useState([]);
+	const [type, setType] = useState("react");
+	const [types, setTypes] = useState(["react", "next"]);
 	useEffect(() => {
 		window.addEventListener("message", (event) => {
 			const message = event.data;
-
-			if (message.command === "refactor") {
-				console.log(message);
-			} else if (message.command === "structure") {
-				setStructure(message.data);
+			switch (message.command) {
+				case "structure":
+					setStructure(message.data);
+					break;
+				case "types":
+					setTypes(message.data);
+					break;
+				default:
+					break;
 			}
 		});
 	}, []);
 
 	const addPath = (newPath) => {
+		let index = path.indexOf(newPath);
+		if (index !== -1) {
+			return;
+		}
+
+		let newPathArray = newPath.replace(`${structure.rootPath}/`, "").split("/");
+		let newStructure = {};
+		for (let i = newPathArray.length - 1; i >= 0; i--) {
+			let folder = {};
+			folder[newPathArray[i]] = {
+				path: `${structure.rootPath}/${newPathArray.slice(0, i + 1).join("/")}`,
+				name: newPathArray[i],
+				folders: newStructure,
+			};
+			newStructure = folder;
+		}
+		setStructure((prev) => {
+			return Lodash.merge(prev, { folders: newStructure });
+		});
 		setPath([...path, newPath]);
 	};
 
 	const save = () => {
-		setPath([]);
 		// window.parent.postMessage({ command: "addPath" }, "*");
+		setPath([]);
 	};
 
 	return (
-		<div>
+		<div className="App">
+			<Types types={types} setType={setType} currentType={type} />
 			<Route addPath={addPath} folders={structure.folders} />
 			<button onClick={save}>Save</button>
 		</div>
