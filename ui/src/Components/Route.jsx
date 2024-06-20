@@ -1,6 +1,4 @@
-import AddFolder from "./AddFolder";
-
-function Route({ folders, addPath }) {
+function Route({ folders, addFolder }) {
 	if (Object.keys(folders).length === 0) return null;
 
 	return (
@@ -23,9 +21,9 @@ function Route({ folders, addPath }) {
 									) : null}
 									{key}
 								</span>
-								<AddFolder addFolder={addPath} parentPath={folders[key].path} />
+								<button onClick={() => addFolder(folders[key].path)}>+</button>
 							</summary>
-							<Route folders={folders[key].folders} addPath={addPath} />
+							<Route folders={folders[key].folders} addFolder={addFolder} />
 						</details>
 					</div>
 				);

@@ -5,12 +5,15 @@ import "./App.css";
 import Code from "./code";
 import Route from "./Components/Route";
 import Types from "./Components/Types";
+import AddFolder from "./Components/AddFolder";
 
 function App() {
 	const [structure, setStructure] = useState(Code);
 	const [path, setPath] = useState([]);
 	const [type, setType] = useState("react");
 	const [types, setTypes] = useState(["react", "next"]);
+	const [newFoderPath, setNewFoderPath] = useState("");
+
 	useEffect(() => {
 		window.addEventListener("message", (event) => {
 			const message = event.data;
@@ -49,6 +52,17 @@ function App() {
 		});
 		setPath([...path, newPath]);
 	};
+	const addFolder = (newPath) => {
+		setNewFoderPath(newPath);
+	};
+	const saveFolder = (folderName) => {
+		if (folderName === "") {
+			setNewFoderPath("");
+			return;
+		}
+		addPath(`${newFoderPath}/${folderName}`);
+		setNewFoderPath("");
+	};
 
 	const save = () => {
 		// window.parent.postMessage({ command: "addPath" }, "*");
@@ -58,7 +72,10 @@ function App() {
 	return (
 		<div className="App">
 			<Types types={types} setType={setType} currentType={type} />
-			<Route addPath={addPath} folders={structure.folders} />
+			{newFoderPath !== "" && (
+				<AddFolder saveFolder={saveFolder} parentPath={newFoderPath} />
+			)}
+			<Route addFolder={addFolder} folders={structure.folders} />
 			<button onClick={save}>Save</button>
 		</div>
 	);
