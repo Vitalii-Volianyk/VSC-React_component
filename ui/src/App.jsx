@@ -71,12 +71,17 @@ function App() {
 
 	return (
 		<div className="App">
-			<Types types={types} setType={setType} currentType={type} />
-			{newFoderPath !== "" && (
-				<AddFolder saveFolder={saveFolder} parentPath={newFoderPath} />
-			)}
+			<div className="floating">
+				<Types types={types} setType={setType} currentType={type} />
+				{newFoderPath !== "" && (
+					<AddFolder saveFolder={saveFolder} parentPath={newFoderPath} />
+				)}
+			</div>
+
 			<Route addFolder={addFolder} folders={structure.folders} />
-			<button onClick={save}>Save</button>
+			<button className="MainButton" onClick={save}>
+				Save
+			</button>
 		</div>
 	);
 }
