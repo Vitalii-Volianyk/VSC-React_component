@@ -4,51 +4,63 @@ const Templates = {
 
 		"#Styles[list]": {
 			module: {
-				let: "import styles from './{{ComponentName}}.module.css';",
+				val: "import styles from './{{ComponentName}}.module.css';",
 				content: `import "./{{ComponentName}}.module.css";`,
 				file: "{{ComponentName}}.module.css",
 			},
 			css: {
-				let: "import './{{ComponentName}}.css';",
+				val: "import './{{ComponentName}}.css';",
 				content: `import "./{{ComponentName}}.css";`,
 				file: "{{ComponentName}}.css",
 			},
 			scss: {
-				let: "import './{{ComponentName}}.scss';",
+				val: "import './{{ComponentName}}.scss';",
 				content: `import "./{{ComponentName}}.scss";`,
 				file: "{{ComponentName}}.scss",
 			},
 			none: {
-				let: "",
+				val: "",
 				content: "",
 				file: "",
 			},
 		},
 
 		"Component_type[radio]": {
-			function: {
-				content: `{{Styles}}
+			function: [
+				{
+					content: `{{Styles}}
 				function {{ComponentName}}() {
 					return <{{Main_tag}} className="{{ComponentName}}"></{{Main_tag}}>;
 				}
 					export default {{ComponentName}};`,
-				file: "{{ComponentName}}.jsx",
-			},
+					file: "{{ComponentName}}.jsx",
+				},
+				{
+					content: "export default {{ComponentName}};",
+					file: "index.jsx",
+				},
+			],
 
-			class: {
-				content: `{{Styles}}
+			class: [
+				{
+					content: `{{Styles}}
 				class {{ComponentName}} extends React.Component {
 					render() {
 						return <{{Main_tag}} className="{{ComponentName}}"></{{Main_tag}}>;
 					}
 				}
 				export default {{ComponentName}};`,
-				file: "{{ComponentName}}.jsx",
-			},
+					file: "{{ComponentName}}.jsx",
+				},
+				{
+					content: "export default {{ComponentName}};",
+					file: "index.jsx",
+				},
+			],
 		},
 	},
 	NextJS: {
-		"$Main_tag[input]": "div",
+		"$Main_tag[input]": "div2",
 
 		"#Styles[list]": {
 			module: {
@@ -61,7 +73,7 @@ const Templates = {
 				content: `import "./{{ComponentName}}.css";`,
 				file: "{{ComponentName}}.css",
 			},
-			scss: {
+			scss2: {
 				let: "import './{{ComponentName}}.scss';",
 				content: `import "./{{ComponentName}}.scss";`,
 				file: "{{ComponentName}}.scss",
@@ -100,3 +112,5 @@ const Templates = {
 		},
 	},
 };
+
+export default Templates;

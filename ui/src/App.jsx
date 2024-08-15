@@ -3,6 +3,7 @@ import { useState } from "react";
 import Lodash from "lodash";
 import "./App.css";
 import Code from "./code";
+import Templates from "./template";
 import Route from "./Components/Route";
 import Types from "./Components/Types";
 import AddFolder from "./Components/AddFolder";
@@ -10,8 +11,7 @@ import AddFolder from "./Components/AddFolder";
 function App() {
 	const [structure, setStructure] = useState(Code);
 	const [path, setPath] = useState([]);
-	const [type, setType] = useState("react");
-	const [types, setTypes] = useState(["react", "next"]);
+	const [type, setType] = useState(Object.keys(Templates)[0]);
 	const [newFoderPath, setNewFoderPath] = useState("");
 
 	useEffect(() => {
@@ -21,9 +21,9 @@ function App() {
 				case "structure":
 					setStructure(message.data);
 					break;
-				case "types":
-					setTypes(message.data);
-					break;
+				// case "types":
+				// 	setTypes(message.data);
+				// 	break;
 				default:
 					break;
 			}
@@ -72,7 +72,7 @@ function App() {
 	return (
 		<div className="App">
 			<div className="floating">
-				<Types types={types} setType={setType} currentType={type} />
+				<Types setType={setType} templates={Templates} currentType={type} />
 				{newFoderPath !== "" && (
 					<AddFolder saveFolder={saveFolder} parentPath={newFoderPath} />
 				)}
