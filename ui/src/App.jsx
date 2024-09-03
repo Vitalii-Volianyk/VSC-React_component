@@ -11,8 +11,10 @@ import AddFolder from "./Components/AddFolder";
 function App() {
 	const [structure, setStructure] = useState(Code);
 	const [path, setPath] = useState([]);
-	const [type, setType] = useState(Object.keys(Templates)[0]);
 	const [newFoderPath, setNewFoderPath] = useState("");
+	const [render, setRender] = useState(() => {
+		return;
+	});
 
 	useEffect(() => {
 		window.addEventListener("message", (event) => {
@@ -72,9 +74,13 @@ function App() {
 	return (
 		<div className="App">
 			<div className="floating">
-				<Types setType={setType} templates={Templates} currentType={type} />
+				<Types templates={Templates} render={setRender} />
 				{newFoderPath !== "" && (
-					<AddFolder saveFolder={saveFolder} parentPath={newFoderPath} />
+					<AddFolder
+						saveFolder={saveFolder}
+						parentPath={newFoderPath}
+						render={render}
+					/>
 				)}
 			</div>
 

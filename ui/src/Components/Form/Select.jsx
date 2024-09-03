@@ -1,17 +1,14 @@
-import { useState } from "react";
-
-function Select({ type = "input", defaultVal, name }) {
-	const [val, setVal] = useState(defaultVal);
+function Select({ values, name, value, setVal }) {
 	return (
 		<div className="input">
 			<label htmlFor={name}>{name.replace("_", " ")}</label>
 			<select
 				name={name}
-				value={val}
+				value={value}
 				onChange={(e) => setVal(e.target.value)}
 				id={name}
 			>
-				{defaultVal.map((item, index) => (
+				{values.map((item, index) => (
 					<option key={index} value={item}>
 						{item}
 					</option>

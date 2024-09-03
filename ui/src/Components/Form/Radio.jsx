@@ -1,17 +1,19 @@
-import { useState } from "react";
-
-function Radio({ type = "input", defaultVal, name }) {
-	const [val, setVal] = useState(defaultVal);
+function Radio({ values, name, value, setVal }) {
 	return (
 		<div className="input">
 			<label htmlFor={name}>{name.replace("_", " ")}</label>
-			<input
-				type={type}
-				name={name}
-				id={name}
-				value={val}
-				onChange={(e) => setVal(e.target.value)}
-			/>
+			{values.map((item, index) => (
+				<div key={index}>
+					<input
+						type="radio"
+						name={name}
+						value={item}
+						checked={item === value ? "cheked" : false}
+						onChange={(e) => setVal(e.target.value)}
+					/>
+					<label htmlFor={item}>{item}</label>
+				</div>
+			))}
 		</div>
 	);
 }

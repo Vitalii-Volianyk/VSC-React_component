@@ -1,15 +1,12 @@
-import { useState } from "react";
-
-function Input({ type = "input", defaultVal, name }) {
-	const [val, setVal] = useState(defaultVal);
+function Input({ name, value, setVal }) {
 	return (
 		<div className="input">
 			<label htmlFor={name}>{name.replace("_", " ")}</label>
 			<input
-				type={type}
+				type="input"
 				name={name}
 				id={name}
-				value={val}
+				value={value}
 				onChange={(e) => setVal(e.target.value)}
 			/>
 		</div>

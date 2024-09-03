@@ -1,14 +1,35 @@
-import Input from "./Form/Input";
-import Select from "./Form/Select";
+import { useState } from "react";
+import { compileTemplate } from "../func";
+import Field from "./Form/Field";
 
-function Types({ setType, currentType, templates }) {
+function Types({ templates }) {
+	const [currentType, setCurrentType] = useState(Object.keys(templates)[0]);
+	const [vars, setVars] = useState({});
+	const [subTemplates, setSubTemplates] = useState({});
+	const [currTemplates, setCurrTemplates] = useState({});
+
+	const resetValues = () => {
+		setVars({});
+		setSubTemplates({});
+		setCurrTemplates({});
+	};
+
+	if (Object.keys(subTemplates).length !== 0) {
+		console.log(
+			compileTemplate(templates, currentType, vars, subTemplates, currTemplates)
+		);
+	}
+
 	return (
 		<div className="TypesContainer">
 			<span>Progect type:</span>
 			{Object.keys(templates).map((type, index) => (
 				<div
 					key={index}
-					onClick={(e) => setType(type)}
+					onClick={(e) => {
+						setCurrentType(type);
+						resetValues();
+					}}
 					className={currentType === type ? "checked" : "unchecked"}
 				>
 					<div className="radio"></div>
@@ -17,35 +38,39 @@ function Types({ setType, currentType, templates }) {
 			))}
 
 			{Object.keys(templates[currentType]).map((key, index) => {
+				const type = key.match(/^.*\[(.*)\]$/)[1] || "input";
+				const defaultVal = templates[currentType][key];
 				if (key.match(/^\$/))
 					return (
-						<Input
+						<Field
+							change={setVars}
+							values={vars}
 							key={index}
-							type={key.match(/^.*\[(.*)\]$/)[1] || "input"}
-							defaultVal={templates[currentType][key]}
+							type={type}
+							defaultVal={defaultVal}
 							name={key.match(/^\$(.*)\[.*\]$/)[1]}
 						/>
 					);
 				if (key.match(/^#/))
 					return (
-						<Select
+						<Field
+							change={setSubTemplates}
+							values={subTemplates}
 							key={index}
-							type={key.match(/^.*\[(.*)\]$/)[1] || "input"}
-							defaultVal={Object.keys(templates[currentType][key])}
+							type={type}
+							defaultVal={Object.keys(defaultVal)}
 							name={key.match(/^#(.*)\[.*\]$/)[1]}
 						/>
 					);
 				return (
-					<div key={index} className="radio">
-						<input
-							type="radio"
-							name={currentType}
-							id={key}
-							value={key}
-							onChange={(e) => setType(key)}
-						/>
-						<label htmlFor={key}>{key[0].toUpperCase() + key.slice(1)}</label>
-					</div>
+					<Field
+						change={setCurrTemplates}
+						values={currTemplates}
+						key={index}
+						type={type}
+						defaultVal={Object.keys(defaultVal)}
+						name={key.match(/^(.*)\[.*\]$/)[1]}
+					/>
 				);
 			})}
 		</div>

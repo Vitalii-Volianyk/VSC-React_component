@@ -39,6 +39,9 @@ const Templates = {
 					content: "export default {{ComponentName}};",
 					file: "index.jsx",
 				},
+				{
+					folder: "Components/{{ComponentName}}",
+				},
 			],
 
 			class: [
