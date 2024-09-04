@@ -12,9 +12,6 @@ function App() {
 	const [structure, setStructure] = useState(Code);
 	const [path, setPath] = useState([]);
 	const [newFoderPath, setNewFoderPath] = useState("");
-	const [render, setRender] = useState(() => {
-		return;
-	});
 
 	useEffect(() => {
 		window.addEventListener("message", (event) => {
@@ -54,9 +51,7 @@ function App() {
 		});
 		setPath([...path, newPath]);
 	};
-	const addFolder = (newPath) => {
-		setNewFoderPath(newPath);
-	};
+
 	const saveFolder = (folderName) => {
 		if (folderName === "") {
 			setNewFoderPath("");
@@ -74,17 +69,13 @@ function App() {
 	return (
 		<div className="App">
 			<div className="floating">
-				<Types templates={Templates} render={setRender} />
+				<Types templates={Templates} />
 				{newFoderPath !== "" && (
-					<AddFolder
-						saveFolder={saveFolder}
-						parentPath={newFoderPath}
-						render={render}
-					/>
+					<AddFolder saveFolder={saveFolder} parentPath={newFoderPath} />
 				)}
 			</div>
 
-			<Route addFolder={addFolder} folders={structure.folders} />
+			<Route addFolder={setNewFoderPath} folders={structure.folders} />
 			<button className="MainButton" onClick={save}>
 				Save
 			</button>

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { compileTemplate } from "../func";
+
 import Field from "./Form/Field";
 
 function Types({ templates }) {
@@ -14,11 +14,15 @@ function Types({ templates }) {
 		setCurrTemplates({});
 	};
 
-	if (Object.keys(subTemplates).length !== 0) {
-		console.log(
-			compileTemplate(templates, currentType, vars, subTemplates, currTemplates)
-		);
-	}
+	// const saveFolder = () => {
+	// 	if (Object.keys(subTemplates).length !== 0) {
+	// 			templates,
+	// 			currentType,
+	// 			vars,
+	// 			subTemplates,
+	// 			currTemplates
+	// 	}
+	// };
 
 	return (
 		<div className="TypesContainer">

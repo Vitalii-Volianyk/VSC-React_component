@@ -1,5 +1,5 @@
 const Templates = {
-	ReactJS: {
+	"ReactJS(jsx)": {
 		"$Main_tag[input]": "div",
 
 		"#Styles[list]": {
@@ -62,7 +62,7 @@ const Templates = {
 			],
 		},
 	},
-	NextJS: {
+	"NextJS(jsx)": {
 		"$Main_tag[input]": "div2",
 
 		"#Styles[list]": {
