@@ -1,19 +1,23 @@
 function Radio({ values, name, value, setVal }) {
 	return (
-		<div className="input">
-			<label htmlFor={name}>{name.replace("_", " ")}</label>
-			{values.map((item, index) => (
-				<div key={index}>
-					<input
-						type="radio"
-						name={name}
-						value={item}
-						checked={item === value ? "cheked" : false}
-						onChange={(e) => setVal(e.target.value)}
-					/>
-					<label htmlFor={item}>{item}</label>
-				</div>
-			))}
+		<div className="radio">
+			<span>{name.replace("_", " ")}</span>
+			<div className="option">
+				{values.map((item, index) => (
+					<div key={index} className={item === value ? "cheked" : ""}>
+						<input
+							type="radio"
+							name={name}
+							id={item}
+							value={item}
+							key={index}
+							checked={item === value ? "cheked" : false}
+							onChange={(e) => setVal(e.target.value)}
+						/>
+						<label htmlFor={item}>{item}</label>
+					</div>
+				))}
+			</div>
 		</div>
 	);
 }

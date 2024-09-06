@@ -1,45 +1,37 @@
-import { useState } from "react";
-
+import { useEffect, useState } from "react";
 import Field from "./Form/Field";
+import Select from "./Form/Select";
 
-function Types({ templates }) {
+function Types({ templates, params }) {
 	const [currentType, setCurrentType] = useState(Object.keys(templates)[0]);
 	const [vars, setVars] = useState({});
 	const [subTemplates, setSubTemplates] = useState({});
 	const [currTemplates, setCurrTemplates] = useState({});
 
-	const resetValues = () => {
+	const resetValues = (type) => {
+		setCurrentType(type);
 		setVars({});
 		setSubTemplates({});
 		setCurrTemplates({});
 	};
 
-	// const saveFolder = () => {
-	// 	if (Object.keys(subTemplates).length !== 0) {
-	// 			templates,
-	// 			currentType,
-	// 			vars,
-	// 			subTemplates,
-	// 			currTemplates
-	// 	}
-	// };
+	useEffect(() => {
+		params({
+			currentType,
+			vars,
+			subTemplates,
+			currTemplates,
+		});
+	}, [currentType, vars, subTemplates, currTemplates, params]);
 
 	return (
 		<div className="TypesContainer">
-			<span>Progect type:</span>
-			{Object.keys(templates).map((type, index) => (
-				<div
-					key={index}
-					onClick={(e) => {
-						setCurrentType(type);
-						resetValues();
-					}}
-					className={currentType === type ? "checked" : "unchecked"}
-				>
-					<div className="radio"></div>
-					<label htmlFor={type}>{type[0].toUpperCase() + type.slice(1)}</label>
-				</div>
-			))}
+			<Select
+				values={Object.keys(templates)}
+				value={currentType || Object.keys(templates)[0]}
+				setVal={resetValues}
+				name="Project_type"
+			/>
 
 			{Object.keys(templates[currentType]).map((key, index) => {
 				const type = key.match(/^.*\[(.*)\]$/)[1] || "input";

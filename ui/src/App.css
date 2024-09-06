@@ -213,19 +213,7 @@ body {
 	justify-content: space-between;
 	padding: 10px 20px;
 	border-radius: 10px;
-	& > div {
-		display: flex;
-		gap: 10px;
-		padding: 5px;
-		flex-direction: row;
-		justify-content: flex-start;
-		cursor: pointer;
-		border: 1px solid rgba(0, 140, 255, 0.2);
-		border-radius: 5px;
-		& label {
-			cursor: pointer;
-		}
-	}
+	max-width: 400px;
 	& .subContainer {
 		display: flex;
 		flex-direction: column;
@@ -246,35 +234,124 @@ body {
 			}
 		}
 	}
-	& .radio {
-		width: 20px;
-		height: 20px;
-		border-radius: 50%;
-		position: relative;
-		transition: background-color 0.3s ease-in-out;
-		&::before {
-			content: "";
-			display: block;
-			position: absolute;
-			top: 50%;
-			left: 50%;
-			transform: translate(-50%, -50%);
-			width: 15px;
-			height: 15px;
-			border-radius: 50%;
-			transition: background-color 0.3s ease-in-out;
-		}
+}
+
+.input {
+	display: flex;
+	flex-direction: row;
+	justify-content: stretch;
+	align-items: center;
+	gap: 10px;
+	padding-left: 5px;
+	border-radius: 10px;
+	border: 1px solid rgba(0, 140, 255, 0.2);
+	& label {
+		display: block;
 	}
-	& .unchecked .radio {
+	& input {
 		background-color: rgba(0, 140, 255, 0.1);
-		&::before {
-			background-color: #cde9ff73;
+		border: 1px solid rgba(27, 151, 252, 0.2);
+		border-radius: 5px;
+		color: white;
+		font-size: 1.1em;
+		padding: 5px;
+		display: flex;
+		flex: 1;
+		width: 20px;
+		&:focus {
+			outline: none;
+			background-color: rgba(16, 39, 68, 0.44);
 		}
 	}
-	& .checked .radio {
-		background-color: rgb(36, 144, 233);
-		&::before {
-			background-color: #e5f4ff;
+}
+
+.select {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+	gap: 10px;
+	padding-left: 5px;
+	border-radius: 10px;
+	border: 1px solid rgba(0, 140, 255, 0.2);
+	& .select__value {
+		position: relative;
+		background-color: rgba(0, 140, 255, 0.1);
+		border: 1px solid rgba(27, 151, 252, 0.2);
+		border-radius: 5px;
+		color: white;
+		font-size: 1.1em;
+		padding: 5px;
+		flex: 1;
+	}
+	& .select__options {
+		position: absolute;
+		top: 100%;
+		left: 0;
+		width: 100%;
+		background-color: rgb(43, 63, 89);
+		border: 1px solid rgba(27, 151, 252, 0.2);
+		border-radius: 5px;
+		color: #fff;
+		font-size: 1.1em;
+		padding: 5px;
+		z-index: 15;
+		&:focus {
+			outline: none;
+			background-color: rgba(108, 177, 255, 0.6);
+		}
+		& span {
+			display: block;
+			padding: 5px;
+			cursor: pointer;
+			border-radius: 5px;
+			&:hover {
+				background-color: rgba(16, 39, 68, 0.44);
+			}
+		}
+	}
+}
+
+.radio {
+	display: flex;
+	flex-direction: column;
+
+	justify-content: stretch;
+	align-items: center;
+	gap: 10px;
+	padding: 5px;
+	border-radius: 10px;
+	border: 1px solid rgba(0, 140, 255, 0.2);
+	& span {
+		display: block;
+		width: 100%;
+
+		text-align: left;
+	}
+	& div {
+		display: flex;
+		flex-direction: row;
+
+		gap: 10px;
+	}
+	& .option {
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+		gap: 10px;
+
+		& div {
+			display: flex;
+			padding: 5px;
+			border-radius: 5px;
+			border: 1px solid rgba(27, 151, 252, 0.2);
+		}
+		& input {
+			width: 16px;
+			height: 16px;
+		}
+		& label {
+			cursor: pointer;
 		}
 	}
 }

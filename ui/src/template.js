@@ -40,7 +40,7 @@ const Templates = {
 					file: "index.jsx",
 				},
 				{
-					folder: "Components/{{ComponentName}}",
+					folder: "gfdgfgffdgdf/{{ComponentName}}",
 				},
 			],
 
@@ -67,18 +67,18 @@ const Templates = {
 
 		"#Styles[list]": {
 			module: {
-				let: "import styles from './{{ComponentName}}.module.css';",
-				content: `import "./{{ComponentName}}.module.css";`,
+				val: "import styles from './{{ComponentName}}.module.css';",
+				content: "",
 				file: "{{ComponentName}}.module.css",
 			},
 			css: {
-				let: "import './{{ComponentName}}.css';",
-				content: `import "./{{ComponentName}}.css";`,
+				val: "import './{{ComponentName}}.css';",
+				content: "",
 				file: "{{ComponentName}}.css",
 			},
 			scss2: {
-				let: "import './{{ComponentName}}.scss';",
-				content: `import "./{{ComponentName}}.scss";`,
+				val: "import './{{ComponentName}}.scss';",
+
 				file: "{{ComponentName}}.scss",
 			},
 			none: {

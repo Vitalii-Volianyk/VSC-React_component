@@ -5,7 +5,8 @@ const prepareTemplate = (
 	currentType,
 	vars,
 	subTemplates,
-	currTemplates
+	currTemplates,
+	folderName
 ) => {
 	let subTemplatestemp = {};
 	let template = {};
@@ -25,49 +26,58 @@ const prepareTemplate = (
 	return {
 		template: template,
 		subTemplates: subTemplatestemp,
-		variable: { ...vars, ComponentName: "ComponentName" },
+		variable: { ...vars, ComponentName: folderName },
 		subVars: subVars,
 	};
 };
 
-const precompileTemplate = (item, compiled) => {
+const precompileTemplate = (item, compiled, newFoderPath) => {
 	if (!item.file) {
 		if (item.folder) {
 			return {
-				path: Handlebars.compile(item.folder)(compiled),
+				path: newFoderPath + "/" + Handlebars.compile(item.folder)(compiled),
 			};
 		}
 		return;
 	}
 	const content = Handlebars.compile(item.content || "")(compiled);
 	const file = Handlebars.compile(item.file)(compiled);
-	return { content, path: file };
+	return { content, path: newFoderPath + "/" + file };
 };
 
-const compileTemplate = (templates, currentType, vars, subTemp, currTemp) => {
+const compileTemplate = (
+	templates,
+	currentType,
+	vars,
+	subTemp,
+	currTemp,
+	folderName,
+	newFoderPath
+) => {
 	const { template, subTemplates, variable, subVars } = prepareTemplate(
 		templates,
 		currentType,
 		vars,
 		subTemp,
-		currTemp
+		currTemp,
+		folderName
 	);
 	let compiled = { ...variable };
 	let toGenerate = [];
 	Object.keys(subVars).forEach((key) => {
-		compiled[key] = Handlebars.compile(subVars[key])(vars);
+		compiled[key] = Handlebars.compile(subVars[key])(compiled);
 	});
 	Object.keys(subTemplates).forEach((key) => {
 		if (Array.isArray(template[key])) {
 			subTemplates[key].forEach((item) => {
-				const preC = precompileTemplate(item, compiled);
+				const preC = precompileTemplate(item, compiled, newFoderPath);
 				if (preC) {
 					toGenerate.push(preC);
 				}
 			});
 			return;
 		}
-		const preC = precompileTemplate(subTemplates[key], compiled);
+		const preC = precompileTemplate(subTemplates[key], compiled, newFoderPath);
 		if (preC) {
 			toGenerate.push(preC);
 		}
@@ -76,14 +86,14 @@ const compileTemplate = (templates, currentType, vars, subTemp, currTemp) => {
 	Object.keys(template).forEach((key) => {
 		if (Array.isArray(template[key])) {
 			template[key].forEach((item) => {
-				const preC = precompileTemplate(item, compiled);
+				const preC = precompileTemplate(item, compiled, newFoderPath);
 				if (preC) {
 					toGenerate.push(preC);
 				}
 			});
 			return;
 		}
-		const preC = precompileTemplate(template[key], compiled);
+		const preC = precompileTemplate(template[key], compiled, newFoderPath);
 		if (preC) {
 			toGenerate.push(preC);
 		}
