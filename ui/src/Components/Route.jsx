@@ -13,8 +13,8 @@ function Route({ folders, addFolder }) {
 									{q_folders > 0 ? (
 										<svg
 											xmlns="http://www.w3.org/2000/svg"
-											width="10.033"
-											height="5"
+											viewBox="0 0 10.033 5"
+											width={11}
 										>
 											<path d="M5.016 0 0 .003 2.506 2.5 5.016 5l2.509-2.5L10.033.003 5.016 0z" />
 										</svg>

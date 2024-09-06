@@ -5,9 +5,10 @@ function Select({ values, name, value, setVal }) {
 	return (
 		<div className="select">
 			<label htmlFor={name}>{name.replace("_", " ")}</label>
+
 			<div className="select__value" onClick={() => setShow((prev) => !prev)}>
 				{value}
-				<i className="fas fa-caret-down"></i>
+
 				{show && (
 					<div className="select__options" id={name}>
 						{values.map((item, index) => (
@@ -18,6 +19,13 @@ function Select({ values, name, value, setVal }) {
 					</div>
 				)}
 			</div>
+			<svg
+				className={show ? "open" : "close"}
+				xmlns="http://www.w3.org/2000/svg"
+				viewBox="0 0 10.033 5"
+			>
+				<path d="M5.016 0 0 .003 2.506 2.5 5.016 5l2.509-2.5L10.033.003 5.016 0z" />
+			</svg>
 		</div>
 	);
 }
