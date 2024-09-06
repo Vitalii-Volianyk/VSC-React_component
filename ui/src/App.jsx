@@ -64,6 +64,12 @@ function App() {
 		setPath((prev) => [...prev, ...compiled]);
 	};
 
+	const removePath = (index) => {
+		setPath((prev) => {
+			return prev.filter((_, i) => i !== index);
+		});
+	};
+
 	const saveFolder = (folderName) => {
 		if (folderName === "") {
 			setNewFoderPath("");
@@ -81,17 +87,26 @@ function App() {
 
 	return (
 		<div className="App">
-			<div className="floating">
-				<Types templates={Templates} params={setParams} />
-				{newFoderPath !== "" && (
-					<AddFolder saveFolder={saveFolder} parentPath={newFoderPath} />
-				)}
-			</div>
+			<div>
+				<div className="floating">
+					<Types templates={Templates} params={setParams} />
+					{newFoderPath !== "" && (
+						<AddFolder saveFolder={saveFolder} parentPath={newFoderPath} />
+					)}
+				</div>
 
-			<Route addFolder={setNewFoderPath} folders={structure.folders} />
-			<button className="MainButton" onClick={save}>
-				Save
-			</button>
+				<Route addFolder={setNewFoderPath} folders={structure.folders} />
+			</div>
+			<div>
+				{path.map((p, i) => (
+					<div key={i}>
+						{p.path} <button onClick={() => removePath(i)}>X</button>
+					</div>
+				))}
+				<button className="MainButton" onClick={save}>
+					Save
+				</button>
+			</div>
 		</div>
 	);
 }
