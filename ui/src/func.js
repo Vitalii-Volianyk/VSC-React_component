@@ -36,13 +36,14 @@ const precompileTemplate = (item, compiled, newFoderPath) => {
 		if (item.folder) {
 			return {
 				path: newFoderPath + "/" + Handlebars.compile(item.folder)(compiled),
+				basePath: newFoderPath,
 			};
 		}
 		return;
 	}
 	const content = Handlebars.compile(item.content || "")(compiled);
 	const file = Handlebars.compile(item.file)(compiled);
-	return { content, path: newFoderPath + "/" + file };
+	return { content, path: newFoderPath + "/" + file, basePath: newFoderPath };
 };
 
 const compileTemplate = (

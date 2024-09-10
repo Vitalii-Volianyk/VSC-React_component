@@ -8,6 +8,7 @@ import Route from "./Components/Route";
 import Types from "./Components/Types";
 import AddFolder from "./Components/AddFolder";
 import { compileTemplate } from "./func";
+import Changes from "./Components/Changes";
 
 function App() {
 	const [structure, setStructure] = useState(Code);
@@ -22,13 +23,16 @@ function App() {
 				case "structure":
 					setStructure(message.data);
 					break;
-				// case "types":
-				// 	setTypes(message.data);
-				// 	break;
+				case "test":
+					console.log(message);
+					break;
 				default:
 					break;
 			}
 		});
+		if (window.vscode) {
+			window.vscode.postMessage({ command: "updateStructure" });
+		}
 	}, []);
 
 	const addPath = (folderName) => {
@@ -64,9 +68,10 @@ function App() {
 		setPath((prev) => [...prev, ...compiled]);
 	};
 
-	const removePath = (index) => {
+	const removePath = (delPath) => {
+		console.log(delPath);
 		setPath((prev) => {
-			return prev.filter((_, i) => i !== index);
+			return prev.filter((path) => path.path !== delPath);
 		});
 	};
 
@@ -80,9 +85,10 @@ function App() {
 	};
 
 	const save = () => {
-		console.log(path);
-		// window.parent.postMessage({ command: "addPath" }, "*");
-		//setPath([]);
+		if (window.vscode) {
+			window.vscode.postMessage({ command: "addPath", data: path });
+		}
+		setPath([]);
 	};
 
 	return (
@@ -97,16 +103,7 @@ function App() {
 
 				<Route addFolder={setNewFoderPath} folders={structure.folders} />
 			</div>
-			<div>
-				{path.map((p, i) => (
-					<div key={i}>
-						{p.path} <button onClick={() => removePath(i)}>X</button>
-					</div>
-				))}
-				<button className="MainButton" onClick={save}>
-					Save
-				</button>
-			</div>
+			<Changes changes={path} removePath={removePath} save={save} />
 		</div>
 	);
 }
