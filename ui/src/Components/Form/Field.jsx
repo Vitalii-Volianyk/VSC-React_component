@@ -16,7 +16,7 @@ function Field({ type = "input", defaultVal, name, change, values }) {
 			if (!values[name]) {
 				change((prev) => ({
 					...prev,
-					[name]: defaultVal[0],
+					[name]: Object.keys(defaultVal)[0],
 				}));
 			}
 		}
@@ -38,8 +38,8 @@ function Field({ type = "input", defaultVal, name, change, values }) {
 		case "radio":
 			return (
 				<Radio
-					values={defaultVal}
-					value={values[name] || defaultVal[0]}
+					values={Object.keys(defaultVal)}
+					value={values[name] || Object.keys(defaultVal)[0]}
 					setVal={onChange}
 					name={name}
 				/>
@@ -47,8 +47,8 @@ function Field({ type = "input", defaultVal, name, change, values }) {
 		case "list":
 			return (
 				<Select
-					values={defaultVal}
-					value={values[name] || defaultVal[0]}
+					values={Object.keys(defaultVal)}
+					value={values[name] || Object.keys(defaultVal)[0]}
 					setVal={onChange}
 					name={name}
 				/>

@@ -1,6 +1,136 @@
 const { read } = require("fs");
 const vscode = require("vscode");
 
+function getComponentTemplate() {
+	return {
+		"ReactJS(jsx)": {
+			"$Main_tag[input]": "div",
+			"$ext[list]": {
+				js: {
+					val: "js",
+				},
+				jsx: {
+					val: "jsx",
+				},
+				tsx: {
+					val: "tsx",
+				},
+			},
+			"#Styles[list]": {
+				module: {
+					val: 'import styles from "./{{{ComponentName}}}.module.css";',
+					content: 'import "./{{{ComponentName}}}.module.css";',
+					file: "{{{ComponentName}}}.module.css",
+				},
+				css: {
+					val: "import './{{{ComponentName}}}.css';",
+					content: "import './{{{ComponentName}}}.css';",
+					file: "{{{ComponentName}}}.css",
+				},
+				scss: {
+					val: `import './{{{ComponentName}}}.scss';`,
+					content: `import "./{{{ComponentName}}}.scss";`,
+					file: "{{{ComponentName}}}.scss",
+				},
+				none: {
+					val: "",
+					content: "",
+					file: "",
+				},
+			},
+
+			"Component_type[radio]": {
+				function: [
+					{
+						content: `{{{Styles}}}
+				function {{{ComponentName}}}() {
+					return <{{{Main_tag}}} className="{{{ComponentName}}}"></{{{Main_tag}}}>;
+				}
+					export default {{{ComponentName}}};`,
+						file: "{{{ComponentName}}}.{{{ext}}}",
+					},
+					{
+						content: "export default {{{ComponentName}}};",
+						file: "index.{{{ext}}}",
+					},
+					{
+						folder: "gfdgfgffdgdf/{{{ComponentName}}}",
+					},
+				],
+
+				class: [
+					{
+						content: `{{{Styles}}}
+				class {{{ComponentName}}} extends React.Component {
+					render() {
+						return <{{{Main_tag}}} className="{{{ComponentName}}}"></{{{Main_tag}}}>;
+					}
+				}
+				export default {{{ComponentName}}};`,
+						file: "{{{ComponentName}}}.{{{ext}}}",
+					},
+					{
+						content: "export default {{{ComponentName}}};",
+						file: "index.{{{ext}}}",
+					},
+				],
+			},
+		},
+		"NextJS(jsx)": {
+			"$Main_tag[input]": "div2",
+
+			"#Styles[list]": {
+				module: {
+					val: "import styles from './{{{ComponentName}}}.module.css';",
+					content: "",
+					file: "{{{ComponentName}}}.module.css",
+				},
+				css: {
+					val: "import './{{{ComponentName}}}.css';",
+					content: "",
+					file: "{{{ComponentName}}}.css",
+				},
+				scss2: {
+					val: "import './{{{ComponentName}}}.scss';",
+
+					file: "{{{ComponentName}}}.scss",
+				},
+				none: {
+					let: "",
+					content: "",
+					file: "",
+				},
+			},
+
+			"Component_type[radio]": {
+				server: {
+					content: `{{{Styles}}}
+				export default function {{{ComponentName}}}() {
+					return <{{{Main_tag}}} className="{{{ComponentName}}}"></{{{Main_tag}}}>;
+				}`,
+					file: "{{{ComponentName}}}.jsx",
+				},
+
+				client: {
+					content: `{{{Styles}}}
+				export default function {{{ComponentName}}}() {
+					return <{{{Main_tag}}} className="{{{ComponentName}}}"></{{{Main_tag}}}>;
+				}`,
+					file: "{{{ComponentName}}}.jsx",
+				},
+
+				group: {
+					content: `{{{Styles}}}
+				export default function {{{ComponentName}}}() {
+					return <{{{Main_tag}}} className="{{{ComponentName}}}"></{{{Main_tag}}}>;
+				}`,
+					file: "{{{ComponentName}}}.jsx",
+				},
+			},
+		},
+	};
+}
+
 async function getSubFolders(path, file) {
 	let folder = {};
 	if (file[1] === 2) {
@@ -37,12 +167,7 @@ function writeFile(path, writeStr) {
 function activate(context) {
 	let disposable = vscode.commands.registerCommand(
 		"react-component-structure.editStructure",
-		function (url) {
-			let project = {
-				rootPath: url.path,
-				folders: {},
-			};
-
+		async function (url) {
 			const panel = vscode.window.createWebviewPanel(
 				"editStructure",
 				"Edit Structure",
@@ -55,17 +180,28 @@ function activate(context) {
 				}
 			);
 			const webview = panel.webview;
+
+			const cssPath = await vscode.workspace.fs.readDirectory(
+				vscode.Uri.joinPath(context.extensionUri, "media/static/css")
+			);
 			const cssStyle = webview.asWebviewUri(
 				vscode.Uri.joinPath(
 					context.extensionUri,
-					"media/static/css/main.6185841d.css"
+					`media/static/css/${
+						cssPath.filter((item) => item[0].match(/.*\.css$/))[0][0]
+					}`
 				)
+			);
+			const jsPath = await vscode.workspace.fs.readDirectory(
+				vscode.Uri.joinPath(context.extensionUri, "media/static/js")
 			);
 
 			const scriptPath = webview.asWebviewUri(
 				vscode.Uri.joinPath(
 					context.extensionUri,
-					"media/static/js/main.e4ec4cd5.js"
+					`media/static/js/${
+						jsPath.filter((item) => item[0].match(/.*\.js$/))[0][0]
+					}`
 				)
 			);
 
@@ -111,6 +247,10 @@ function activate(context) {
 						case "updateStructure":
 							readFolders(url.path)
 								.then((res) => {
+									let project = {
+										rootPath: url.path,
+										folders: {},
+									};
 									project.folders = res;
 									webview.postMessage({
 										command: "structure",
@@ -120,6 +260,10 @@ function activate(context) {
 								.catch((error) => {
 									console.log(error);
 								});
+							webview.postMessage({
+								command: "template",
+								data: getComponentTemplate(),
+							});
 
 							break;
 						case "addPath":

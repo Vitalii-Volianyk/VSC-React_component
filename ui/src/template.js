@@ -1,11 +1,21 @@
 const Templates = {
 	"ReactJS(jsx)": {
 		"$Main_tag[input]": "div",
-
+		"$ext[list]": {
+			js: {
+				val: "js",
+			},
+			jsx: {
+				val: "jsx",
+			},
+			tsx: {
+				val: "tsx",
+			},
+		},
 		"#Styles[list]": {
 			module: {
 				val: "import styles from './{{ComponentName}}.module.css';",
-				content: `import "./{{ComponentName}}.module.css";`,
+				content: ``,
 				file: "{{ComponentName}}.module.css",
 			},
 			css: {
@@ -33,11 +43,11 @@ const Templates = {
 					return <{{Main_tag}} className="{{ComponentName}}"></{{Main_tag}}>;
 				}
 					export default {{ComponentName}};`,
-					file: "{{ComponentName}}.jsx",
+					file: "{{ComponentName}}.{{ext}}",
 				},
 				{
 					content: "export default {{ComponentName}};",
-					file: "index.jsx",
+					file: "index.{{ext}}",
 				},
 				{
 					folder: "gfdgfgffdgdf/{{ComponentName}}",
@@ -53,11 +63,11 @@ const Templates = {
 					}
 				}
 				export default {{ComponentName}};`,
-					file: "{{ComponentName}}.jsx",
+					file: "{{ComponentName}}.{{ext}}",
 				},
 				{
 					content: "export default {{ComponentName}};",
-					file: "index.jsx",
+					file: "index.{{ext}}",
 				},
 			],
 		},

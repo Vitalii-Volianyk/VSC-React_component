@@ -54,7 +54,7 @@ function Types({ templates, params }) {
 							values={subTemplates}
 							key={index}
 							type={type}
-							defaultVal={Object.keys(defaultVal)}
+							defaultVal={defaultVal}
 							name={key.match(/^#(.*)\[.*\]$/)[1]}
 						/>
 					);
@@ -64,7 +64,7 @@ function Types({ templates, params }) {
 						values={currTemplates}
 						key={index}
 						type={type}
-						defaultVal={Object.keys(defaultVal)}
+						defaultVal={defaultVal}
 						name={key.match(/^(.*)\[.*\]$/)[1]}
 					/>
 				);

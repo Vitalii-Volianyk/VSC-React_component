@@ -2,8 +2,6 @@ import { useEffect } from "react";
 import { useState } from "react";
 import Lodash from "lodash";
 import "./App.css";
-import Code from "./code";
-import Templates from "./template";
 import Route from "./Components/Route";
 import Types from "./Components/Types";
 import AddFolder from "./Components/AddFolder";
@@ -11,7 +9,8 @@ import { compileTemplate } from "./func";
 import Changes from "./Components/Changes";
 
 function App() {
-	const [structure, setStructure] = useState(Code);
+	const [structure, setStructure] = useState({});
+	const [templates, setTemplates] = useState({});
 	const [path, setPath] = useState([]);
 	const [newFoderPath, setNewFoderPath] = useState("");
 	const [params, setParams] = useState({});
@@ -22,6 +21,10 @@ function App() {
 			switch (message.command) {
 				case "structure":
 					setStructure(message.data);
+					break;
+				case "template":
+					setTemplates(message.data);
+
 					break;
 				case "test":
 					console.log(message);
@@ -57,7 +60,7 @@ function App() {
 		});
 
 		const compiled = compileTemplate(
-			Templates,
+			templates,
 			params.currentType,
 			params.vars,
 			params.subTemplates,
@@ -91,17 +94,31 @@ function App() {
 		setPath([]);
 	};
 
+	let temp = Object.keys(templates).length;
+	let temp2 =
+		structure.folders !== undefined && Object.keys(structure.folders).length;
 	return (
 		<div className="App">
 			<div>
 				<div className="floating">
-					<Types templates={Templates} params={setParams} />
+					{temp < 1 ? (
+						<div>Templates not loaded</div>
+					) : (
+						<Types templates={templates} params={setParams} />
+					)}
+
 					{newFoderPath !== "" && (
 						<AddFolder saveFolder={saveFolder} parentPath={newFoderPath} />
 					)}
 				</div>
-
-				<Route addFolder={setNewFoderPath} folders={structure.folders} />
+				{temp2 > 0 ? (
+					<Route
+						addFolder={temp > 0 ? setNewFoderPath : null}
+						folders={structure.folders}
+					/>
+				) : (
+					<button onClick={() => setNewFoderPath(structure.rootPath)}>+</button>
+				)}
 			</div>
 			<Changes changes={path} removePath={removePath} save={save} />
 		</div>

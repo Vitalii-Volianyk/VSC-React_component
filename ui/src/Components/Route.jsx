@@ -1,5 +1,5 @@
 function Route({ folders, addFolder }) {
-	if (Object.keys(folders).length === 0) return null;
+	if (folders === undefined) return null;
 
 	return (
 		<div className="Route">
@@ -21,7 +21,11 @@ function Route({ folders, addFolder }) {
 									) : null}
 									{key}
 								</span>
-								<button onClick={() => addFolder(folders[key].path)}>+</button>
+								{addFolder && (
+									<button onClick={() => addFolder(folders[key].path)}>
+										+
+									</button>
+								)}
 							</summary>
 							<Route folders={folders[key].folders} addFolder={addFolder} />
 						</details>
