@@ -74,30 +74,7 @@ body {
 			max-height: 100vh;
 			transition: max-height 400ms ease;
 		}
-		& summary {
-			display: flex;
-			flex-direction: row;
-			justify-content: space-between;
-			gap: 10px;
-			padding: 8px 0px 8px 8px;
-			align-items: center;
-			cursor: pointer;
-			& > span {
-				display: flex;
-				flex-direction: row;
-				justify-content: center;
-				align-items: center;
-				gap: 5px;
-				& > svg {
-					display: flex;
-					justify-content: center;
-					align-items: center;
-					fill: rgba(0, 140, 255, 0.5);
-					transform: rotate(-90deg);
-					transition: transform 0.3s ease-in-out;
-				}
-			}
-		}
+
 		&[open] > summary > span > svg {
 			transform: rotate(0deg);
 		}
@@ -107,25 +84,49 @@ body {
 		&[open].noCursor {
 			background-color: inherit;
 		}
-		& button {
+	}
+}
+.addFolderButton {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 20px;
+	height: 20px;
+	padding: 10px;
+	margin-right: 8px;
+	background-color: rgba(0, 140, 255, 0.103);
+	border: 1px solid rgb(0, 140, 255);
+	outline: none;
+	color: white;
+	font-weight: 800;
+	border-radius: 50%;
+	transition: background-color 0.3s ease-in-out;
+	&:hover {
+		background-color: rgb(36, 144, 233);
+		cursor: pointer;
+	}
+}
+.expandRoute {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	gap: 10px;
+	padding: 8px 0px 8px 8px;
+	align-items: center;
+	cursor: pointer;
+	& > span {
+		display: flex;
+		flex-direction: row;
+		justify-content: center;
+		align-items: center;
+		gap: 5px;
+		& > svg {
 			display: flex;
 			justify-content: center;
 			align-items: center;
-			width: 20px;
-			height: 20px;
-			padding: 10px;
-			margin-right: 8px;
-			background-color: rgba(0, 140, 255, 0.103);
-			border: 1px solid rgb(0, 140, 255);
-			outline: none;
-			color: white;
-			font-weight: 800;
-			border-radius: 50%;
-			transition: background-color 0.3s ease-in-out;
-			&:hover {
-				background-color: rgb(36, 144, 233);
-				cursor: pointer;
-			}
+			fill: rgba(0, 140, 255, 0.5);
+			transform: rotate(-90deg);
+			transition: transform 0.3s ease-in-out;
 		}
 	}
 }
@@ -188,6 +189,12 @@ body {
 			transition: fill 0.3s ease-in-out;
 		}
 	}
+}
+.rootPath {
+	display: flex;
+	justify-content: space-around;
+	align-items: center;
+	padding: 10px;
 }
 .st0 {
 	display: none;
@@ -293,6 +300,7 @@ body {
 		font-size: 1.1em;
 		padding: 5px 22px 5px 5px;
 		flex: 1;
+		cursor: pointer;
 	}
 	& .select__options {
 		position: absolute;
@@ -376,6 +384,7 @@ body {
 		& input {
 			width: 16px;
 			height: 16px;
+			cursor: pointer;
 		}
 		& label {
 			cursor: pointer;

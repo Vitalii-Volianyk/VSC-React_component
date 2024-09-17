@@ -8,7 +8,7 @@ function Route({ folders, addFolder }) {
 				return (
 					<div key={key}>
 						<details className={q_folders <= 0 ? "noCursor" : null}>
-							<summary>
+							<summary className="expandRoute">
 								<span>
 									{q_folders > 0 ? (
 										<svg
@@ -22,7 +22,7 @@ function Route({ folders, addFolder }) {
 									{key}
 								</span>
 								{addFolder && (
-									<button onClick={() => addFolder(folders[key].path)}>
+									<button className="addFolderButton" onClick={() => addFolder(folders[key].path)}>
 										+
 									</button>
 								)}

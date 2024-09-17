@@ -111,13 +111,20 @@ function App() {
 						<AddFolder saveFolder={saveFolder} parentPath={newFoderPath} />
 					)}
 				</div>
-				{temp2 > 0 ? (
+				<span className="rootPath">
+					{structure.rootPath && structure.rootPath.split("/").pop()}
+					<button
+						className="addFolderButton"
+						onClick={() => setNewFoderPath(structure.rootPath)}
+					>
+						+
+					</button>
+				</span>
+				{temp2 > 0 && (
 					<Route
 						addFolder={temp > 0 ? setNewFoderPath : null}
 						folders={structure.folders}
 					/>
-				) : (
-					<button onClick={() => setNewFoderPath(structure.rootPath)}>+</button>
 				)}
 			</div>
 			<Changes changes={path} removePath={removePath} save={save} />
