@@ -38,33 +38,10 @@
 		"configuration": {
 			"title": "React_component",
 			"properties": {
-				"react_component.extension": {
+				"react_component.templatesPath": {
 					"type": "string",
-					"enum": [
-						"jsx",
-						"js"
-					],
-					"default": "jsx",
-					"description": "React file extension"
-				},
-				"react_component.styles": {
-					"type": "string",
-					"enum": [
-						"module",
-						"emotion",
-						"without"
-					],
-					"default": "module",
-					"description": "Type styles for component"
-				},
-				"react_component.reimport": {
-					"type": "boolean",
-					"enum": [
-						true,
-						false
-					],
-					"default": true,
-					"description": "Enable auto reimport component with index file"
+					"default": "",
+					"description": "The path to use for templates."
 				}
 			}
 		}

@@ -1,4 +1,5 @@
-const { read } = require("fs");
+const { join } = require("path");
+const path = require("path");
 const vscode = require("vscode");
 
 function getComponentTemplate() {
@@ -165,6 +166,25 @@ function writeFile(path, writeStr) {
 }
 
 function activate(context) {
+	const UserDirectoryPath = vscode.env.appRoot;
+	console.log(
+		vscode.workspace
+			.getConfiguration("react-component-structure")
+			.get("rootPath")
+	);
+	if (
+		vscode.workspace
+			.getConfiguration("react-component-structure")
+			.get("rootPath") === undefined ||
+		vscode.workspace
+			.getConfiguration("react-component-structure")
+			.get("rootPath") === ""
+	) {
+		vscode.workspace
+			.getConfiguration("react-component-structure")
+			.update("rootPath", UserDirectoryPath);
+	}
+	console.log(UserDirectoryPath);
 	let disposable = vscode.commands.registerCommand(
 		"react-component-structure.editStructure",
 		async function (url) {
