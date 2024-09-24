@@ -1,135 +1,136 @@
-const { join } = require("path");
 const path = require("path");
+const fs = require("fs");
 const vscode = require("vscode");
+const { group } = require("console");
 
 function getComponentTemplate() {
-	return {
-		"ReactJS(jsx)": {
-			"$Main_tag[input]": "div",
-			"$ext[list]": {
-				js: {
-					val: "js",
-				},
-				jsx: {
-					val: "jsx",
-				},
-				tsx: {
-					val: "tsx",
-				},
+	return `const templates = {
+	"ReactJS(jsx)": {
+		"$Main_tag[input]": "div",
+		"$ext[list]": {
+			js: {
+				val: "js",
 			},
-			"#Styles[list]": {
-				module: {
-					val: 'import styles from "./{{{ComponentName}}}.module.css";',
-					content: 'import "./{{{ComponentName}}}.module.css";',
-					file: "{{{ComponentName}}}.module.css",
-				},
-				css: {
-					val: "import './{{{ComponentName}}}.css';",
-					content: "import './{{{ComponentName}}}.css';",
-					file: "{{{ComponentName}}}.css",
-				},
-				scss: {
-					val: `import './{{{ComponentName}}}.scss';`,
-					content: `import "./{{{ComponentName}}}.scss";`,
-					file: "{{{ComponentName}}}.scss",
-				},
-				none: {
-					val: "",
-					content: "",
-					file: "",
-				},
+			jsx: {
+				val: "jsx",
 			},
+			tsx: {
+				val: "tsx",
+			},
+		},
+		"#Styles[list]": {
+			module: {
+				val: 'import styles from "./{{{ComponentName}}}.module.css";',
+				content: 'import "./{{{ComponentName}}}.module.css";',
+				file: "{{{ComponentName}}}.module.css",
+			},
+			css: {
+				val: "import './{{{ComponentName}}}.css';",
+				content: "import './{{{ComponentName}}}.css';",
+				file: "{{{ComponentName}}}.css",
+			},
+			scss: {
+				val: "import './{{{ComponentName}}}.scss';",
+				content: \`import "./{{{ComponentName}}}.scss";\`,
+				file: "{{{ComponentName}}}.scss",
+			},
+			none: {
+				val: "",
+				content: "",
+				file: "",
+			},
+		},
 
-			"Component_type[radio]": {
-				function: [
-					{
-						content: `{{{Styles}}}
+		"Component_type[radio]": {
+			function: [
+				{
+					content: \`{{{Styles}}}
 				function {{{ComponentName}}}() {
 					return <{{{Main_tag}}} className="{{{ComponentName}}}"></{{{Main_tag}}}>;
 				}
-					export default {{{ComponentName}}};`,
-						file: "{{{ComponentName}}}.{{{ext}}}",
-					},
-					{
-						content: "export default {{{ComponentName}}};",
-						file: "index.{{{ext}}}",
-					},
-					{
-						folder: "gfdgfgffdgdf/{{{ComponentName}}}",
-					},
-				],
+					export default {{{ComponentName}}};\`,
+					file: "{{{ComponentName}}}.{{{ext}}}",
+				},
+				{
+					content: "export default {{{ComponentName}}};",
+					file: "index.{{{ext}}}",
+				},
+				{
+					folder: "gfdgfgffdgdf/{{{ComponentName}}}",
+				},
+			],
 
-				class: [
-					{
-						content: `{{{Styles}}}
+			class: [
+				{
+					content: \`{{{Styles}}}
 				class {{{ComponentName}}} extends React.Component {
 					render() {
 						return <{{{Main_tag}}} className="{{{ComponentName}}}"></{{{Main_tag}}}>;
 					}
 				}
-				export default {{{ComponentName}}};`,
-						file: "{{{ComponentName}}}.{{{ext}}}",
-					},
-					{
-						content: "export default {{{ComponentName}}};",
-						file: "index.{{{ext}}}",
-					},
-				],
+				export default {{{ComponentName}}};\`,
+					file: "{{{ComponentName}}}.{{{ext}}}",
+				},
+				{
+					content: "export default {{{ComponentName}}};",
+					file: "index.{{{ext}}}",
+				},
+			],
+		},
+	},
+	"NextJS(jsx)": {
+		"$Main_tag[input]": "div2",
+
+		"#Styles[list]": {
+			module: {
+				val: "import styles from './{{{ComponentName}}}.module.css';",
+				content: "",
+				file: "{{{ComponentName}}}.module.css",
+			},
+			css: {
+				val: "import './{{{ComponentName}}}.css';",
+				content: "",
+				file: "{{{ComponentName}}}.css",
+			},
+			scss2: {
+				val: "import './{{{ComponentName}}}.scss';",
+
+				file: "{{{ComponentName}}}.scss",
+			},
+			none: {
+				let: "",
+				content: "",
+				file: "",
 			},
 		},
-		"NextJS(jsx)": {
-			"$Main_tag[input]": "div2",
 
-			"#Styles[list]": {
-				module: {
-					val: "import styles from './{{{ComponentName}}}.module.css';",
-					content: "",
-					file: "{{{ComponentName}}}.module.css",
-				},
-				css: {
-					val: "import './{{{ComponentName}}}.css';",
-					content: "",
-					file: "{{{ComponentName}}}.css",
-				},
-				scss2: {
-					val: "import './{{{ComponentName}}}.scss';",
-
-					file: "{{{ComponentName}}}.scss",
-				},
-				none: {
-					let: "",
-					content: "",
-					file: "",
-				},
+		"Component_type[radio]": {
+			server: {
+				content: \`{{{Styles}}}
+				export default function {{{ComponentName}}}() {
+					return <{{{Main_tag}}} className="{{{ComponentName}}}"></{{{Main_tag}}}>;
+				}\`,
+				file: "{{{ComponentName}}}.jsx",
 			},
 
-			"Component_type[radio]": {
-				server: {
-					content: `{{{Styles}}}
+			client: {
+				content: \`{{{Styles}}}
 				export default function {{{ComponentName}}}() {
 					return <{{{Main_tag}}} className="{{{ComponentName}}}"></{{{Main_tag}}}>;
-				}`,
-					file: "{{{ComponentName}}}.jsx",
-				},
+				}\`,
+				file: "{{{ComponentName}}}.jsx",
+			},
 
-				client: {
-					content: `{{{Styles}}}
+			group: {
+				content: \`{{{Styles}}}
 				export default function {{{ComponentName}}}() {
 					return <{{{Main_tag}}} className="{{{ComponentName}}}"></{{{Main_tag}}}>;
-				}`,
-					file: "{{{ComponentName}}}.jsx",
-				},
-
-				group: {
-					content: `{{{Styles}}}
-				export default function {{{ComponentName}}}() {
-					return <{{{Main_tag}}} className="{{{ComponentName}}}"></{{{Main_tag}}}>;
-				}`,
-					file: "{{{ComponentName}}}.jsx",
-				},
+				}\`,
+				file: "{{{ComponentName}}}.jsx",
 			},
 		},
-	};
+	},
+};`;
 }
 
 async function getSubFolders(path, file) {
@@ -165,26 +166,24 @@ function writeFile(path, writeStr) {
 	vscode.workspace.fs.writeFile(vscode.Uri.parse(path), writeData);
 }
 
-function activate(context) {
+async function activate(context) {
 	const UserDirectoryPath = vscode.env.appRoot;
-	console.log(
-		vscode.workspace
-			.getConfiguration("react-component-structure")
-			.get("rootPath")
-	);
-	if (
-		vscode.workspace
-			.getConfiguration("react-component-structure")
-			.get("rootPath") === undefined ||
-		vscode.workspace
-			.getConfiguration("react-component-structure")
-			.get("rootPath") === ""
-	) {
-		vscode.workspace
-			.getConfiguration("react-component-structure")
-			.update("rootPath", UserDirectoryPath);
+	vscode.workspace.fs;
+
+	const config = vscode.workspace.getConfiguration("react_component");
+
+	if (config.inspect("templatesPath").globalValue === undefined) {
+		config.update(
+			"templatesPath",
+			vscode.Uri.joinPath(vscode.Uri.parse(UserDirectoryPath), "templates")
+				.path,
+			true
+		);
 	}
-	console.log(UserDirectoryPath);
+	const templatesPath =
+		config.inspect("templatesPath").workspaceValue ||
+		config.inspect("templatesPath").globalValue;
+
 	let disposable = vscode.commands.registerCommand(
 		"react-component-structure.editStructure",
 		async function (url) {
@@ -280,10 +279,38 @@ function activate(context) {
 								.catch((error) => {
 									console.log(error);
 								});
-							webview.postMessage({
-								command: "template",
-								data: getComponentTemplate(),
-							});
+							fs.readFile(
+								path.join(templatesPath, "templates.js"),
+								"utf8",
+								(err, data) => {
+									if (err) {
+										if (err.code === "ENOENT") {
+											fs.writeFile(
+												path.join(templatesPath, "templates.js"),
+												getComponentTemplate(),
+												(err) => {
+													if (err) {
+														console.error(err);
+														return;
+													}
+												}
+											);
+											webview.postMessage({
+												command: "template",
+												data: new Function(
+													`${getComponentTemplate()} return templates;`
+												)(),
+											});
+											return;
+										}
+									}
+									console.log(data);
+									webview.postMessage({
+										command: "template",
+										data: new Function(`${data} return templates;`)(),
+									});
+								}
+							);
 
 							break;
 						case "addPath":
