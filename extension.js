@@ -1,136 +1,10 @@
 const path = require("path");
 const fs = require("fs");
 const vscode = require("vscode");
-const { group } = require("console");
 
 function getComponentTemplate() {
-	return `const templates = {
-	"ReactJS(jsx)": {
-		"$Main_tag[input]": "div",
-		"$ext[list]": {
-			js: {
-				val: "js",
-			},
-			jsx: {
-				val: "jsx",
-			},
-			tsx: {
-				val: "tsx",
-			},
-		},
-		"#Styles[list]": {
-			module: {
-				val: 'import styles from "./{{{ComponentName}}}.module.css";',
-				content: 'import "./{{{ComponentName}}}.module.css";',
-				file: "{{{ComponentName}}}.module.css",
-			},
-			css: {
-				val: "import './{{{ComponentName}}}.css';",
-				content: "import './{{{ComponentName}}}.css';",
-				file: "{{{ComponentName}}}.css",
-			},
-			scss: {
-				val: "import './{{{ComponentName}}}.scss';",
-				content: \`import "./{{{ComponentName}}}.scss";\`,
-				file: "{{{ComponentName}}}.scss",
-			},
-			none: {
-				val: "",
-				content: "",
-				file: "",
-			},
-		},
-
-		"Component_type[radio]": {
-			function: [
-				{
-					content: \`{{{Styles}}}
-				function {{{ComponentName}}}() {
-					return <{{{Main_tag}}} className="{{{ComponentName}}}"></{{{Main_tag}}}>;
-				}
-					export default {{{ComponentName}}};\`,
-					file: "{{{ComponentName}}}.{{{ext}}}",
-				},
-				{
-					content: "export default {{{ComponentName}}};",
-					file: "index.{{{ext}}}",
-				},
-				{
-					folder: "gfdgfgffdgdf/{{{ComponentName}}}",
-				},
-			],
-
-			class: [
-				{
-					content: \`{{{Styles}}}
-				class {{{ComponentName}}} extends React.Component {
-					render() {
-						return <{{{Main_tag}}} className="{{{ComponentName}}}"></{{{Main_tag}}}>;
-					}
-				}
-				export default {{{ComponentName}}};\`,
-					file: "{{{ComponentName}}}.{{{ext}}}",
-				},
-				{
-					content: "export default {{{ComponentName}}};",
-					file: "index.{{{ext}}}",
-				},
-			],
-		},
-	},
-	"NextJS(jsx)": {
-		"$Main_tag[input]": "div2",
-
-		"#Styles[list]": {
-			module: {
-				val: "import styles from './{{{ComponentName}}}.module.css';",
-				content: "",
-				file: "{{{ComponentName}}}.module.css",
-			},
-			css: {
-				val: "import './{{{ComponentName}}}.css';",
-				content: "",
-				file: "{{{ComponentName}}}.css",
-			},
-			scss2: {
-				val: "import './{{{ComponentName}}}.scss';",
-
-				file: "{{{ComponentName}}}.scss",
-			},
-			none: {
-				let: "",
-				content: "",
-				file: "",
-			},
-		},
-
-		"Component_type[radio]": {
-			server: {
-				content: \`{{{Styles}}}
-				export default function {{{ComponentName}}}() {
-					return <{{{Main_tag}}} className="{{{ComponentName}}}"></{{{Main_tag}}}>;
-				}\`,
-				file: "{{{ComponentName}}}.jsx",
-			},
-
-			client: {
-				content: \`{{{Styles}}}
-				export default function {{{ComponentName}}}() {
-					return <{{{Main_tag}}} className="{{{ComponentName}}}"></{{{Main_tag}}}>;
-				}\`,
-				file: "{{{ComponentName}}}.jsx",
-			},
-
-			group: {
-				content: \`{{{Styles}}}
-				export default function {{{ComponentName}}}() {
-					return <{{{Main_tag}}} className="{{{ComponentName}}}"></{{{Main_tag}}}>;
-				}\`,
-				file: "{{{ComponentName}}}.jsx",
-			},
-		},
-	},
-};`;
+	let temp = fs.readFileSync(path.join(__dirname, "templates.js"), "utf8");
+	return temp;
 }
 
 async function getSubFolders(path, file) {
@@ -161,17 +35,37 @@ async function readFolders(path) {
 	return folders;
 }
 
-function writeFile(path, writeStr) {
+function writeFile(path, writeStr = "") {
+	if (fs.existsSync(path)) {
+		return;
+	}
 	const writeData = Buffer.from(writeStr, "utf8");
-	vscode.workspace.fs.writeFile(vscode.Uri.parse(path), writeData);
+	vscode.workspace.fs.writeFile(vscode.Uri.parse(path), writeData).then(
+		() => {
+			console.log("Write Success");
+		},
+		(err) => {
+			console.log(err);
+		}
+	);
+}
+function createFolder(path) {
+	if (fs.existsSync(path)) {
+		return;
+	}
+	vscode.workspace.fs.createDirectory(vscode.Uri.parse(path)).then(
+		() => {
+			console.log("Create Success");
+		},
+		(err) => {
+			console.log(err);
+		}
+	);
 }
 
 async function activate(context) {
 	const UserDirectoryPath = vscode.env.appRoot;
-	vscode.workspace.fs;
-
 	const config = vscode.workspace.getConfiguration("react_component");
-
 	if (config.inspect("templatesPath").globalValue === undefined) {
 		config.update(
 			"templatesPath",
@@ -304,7 +198,7 @@ async function activate(context) {
 											return;
 										}
 									}
-									console.log(data);
+
 									webview.postMessage({
 										command: "template",
 										data: new Function(`${data} return templates;`)(),
@@ -314,10 +208,11 @@ async function activate(context) {
 
 							break;
 						case "addPath":
-							console.log(message.data);
 							message.data.map((item) => {
 								if (item.content !== undefined) {
 									writeFile(item.path, item.content);
+								} else {
+									createFolder(item.path);
 								}
 							});
 							break;

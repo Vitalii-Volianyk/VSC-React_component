@@ -11,6 +11,10 @@ function AddFolder({ saveFolder, parentPath }) {
 		saveFolder(folderName);
 		setFolderName("");
 	};
+	const cancelAdd = () => {
+		saveFolder("");
+		setFolderName("");
+	};
 
 	return (
 		<div className="addFolder">
@@ -22,7 +26,7 @@ function AddFolder({ saveFolder, parentPath }) {
 				autoFocus={true}
 			/>
 			<div>
-				<button onClick={handleAddFolder}>
+				<button onClick={cancelAdd}>
 					<svg
 						version="1.1"
 						id="icons_1_"

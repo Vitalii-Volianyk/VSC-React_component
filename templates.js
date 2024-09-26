@@ -124,4 +124,56 @@ const templates = {
 			},
 		},
 	},
+	"NextJS(js)": {
+		"$Main_tag[input]": "div2",
+
+		"#Styles[list]": {
+			module: {
+				val: "import styles from './{{{ComponentName}}}.module.css';",
+				content: "",
+				file: "{{{ComponentName}}}.module.css",
+			},
+			css: {
+				val: "import './{{{ComponentName}}}.css';",
+				content: "",
+				file: "{{{ComponentName}}}.css",
+			},
+			scss2: {
+				val: "import './{{{ComponentName}}}.scss';",
+
+				file: "{{{ComponentName}}}.scss",
+			},
+			none: {
+				let: "",
+				content: "",
+				file: "",
+			},
+		},
+
+		"Component_type[radio]": {
+			server: {
+				content: `{{{Styles}}}
+				export default function {{{ComponentName}}}() {
+					return <{{{Main_tag}}} className="{{{ComponentName}}}"></{{{Main_tag}}}>;
+				}`,
+				file: "{{{ComponentName}}}.jsx",
+			},
+
+			client: {
+				content: `{{{Styles}}}
+				export default function {{{ComponentName}}}() {
+					return <{{{Main_tag}}} className="{{{ComponentName}}}"></{{{Main_tag}}}>;
+				}`,
+				file: "{{{ComponentName}}}.jsx",
+			},
+
+			group: {
+				content: `{{{Styles}}}
+				export default function {{{ComponentName}}}() {
+					return <{{{Main_tag}}} className="{{{ComponentName}}}"></{{{Main_tag}}}>;
+				}`,
+				file: "{{{ComponentName}}}.jsx",
+			},
+		},
+	},
 };
