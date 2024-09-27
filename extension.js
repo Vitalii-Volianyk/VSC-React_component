@@ -65,7 +65,7 @@ function createFolder(path) {
 
 async function activate(context) {
 	const UserDirectoryPath = vscode.env.appRoot;
-	const config = vscode.workspace.getConfiguration("react_component");
+	const config = vscode.workspace.getConfiguration("structure_creation");
 	if (config.inspect("templatesPath").globalValue === undefined) {
 		config.update(
 			"templatesPath",
@@ -79,7 +79,7 @@ async function activate(context) {
 		config.inspect("templatesPath").globalValue;
 
 	let disposable = vscode.commands.registerCommand(
-		"react-component-structure.editStructure",
+		"structure_creation.editStructure",
 		async function (url) {
 			const panel = vscode.window.createWebviewPanel(
 				"editStructure",

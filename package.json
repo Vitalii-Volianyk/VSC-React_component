@@ -1,7 +1,7 @@
 {
-	"name": "react-component-structure",
-	"displayName": "React project structure",
-	"description": "Create basic structure for ReactJS/NextJS project",
+	"name": "project-structure-creation",
+	"displayName": "Create project structure",
+	"description": "Create filese/folder structure from templates for any project",
 	"icon": "assets/react-icon-29.png",
 	"version": "4.0.1",
 	"repository": {
@@ -13,6 +13,7 @@
 		"vscode": "^1.65.2"
 	},
 	"categories": [
+		"Snippets",
 		"Other"
 	],
 	"activationEvents": [
@@ -22,7 +23,7 @@
 	"contributes": {
 		"commands": [
 			{
-				"command": "react-component-structure.editStructure",
+				"command": "structure_creation.editStructure",
 				"title": "Edit project structure"
 			}
 		],
@@ -36,9 +37,9 @@
 			]
 		},
 		"configuration": {
-			"title": "React_component",
+			"title": "Structure-creation",
 			"properties": {
-				"react_component.templatesPath": {
+				"structure_creation.templatesPath": {
 					"type": "string",
 					"default": "",
 					"description": "The path to use for templates."

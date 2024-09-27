@@ -1,5 +1,5 @@
 const templates = {
-	"ReactJS(jsx)": {
+	ReactJS: {
 		"$Main_tag[input]": "div",
 		"$ext[list]": {
 			js: {
@@ -7,9 +7,6 @@ const templates = {
 			},
 			jsx: {
 				val: "jsx",
-			},
-			tsx: {
-				val: "tsx",
 			},
 		},
 		"#Styles[list]": {
@@ -49,9 +46,6 @@ const templates = {
 					content: "export default {{{ComponentName}}};",
 					file: "index.{{{ext}}}",
 				},
-				{
-					folder: "gfdgfgffdgdf/{{{ComponentName}}}",
-				},
 			],
 
 			class: [
@@ -72,8 +66,8 @@ const templates = {
 			],
 		},
 	},
-	"NextJS(jsx)": {
-		"$Main_tag[input]": "div2",
+	NextJS: {
+		"$Main_tag[input]": "div",
 
 		"#Styles[list]": {
 			module: {
@@ -86,7 +80,7 @@ const templates = {
 				content: "",
 				file: "{{{ComponentName}}}.css",
 			},
-			scss2: {
+			scss: {
 				val: "import './{{{ComponentName}}}.scss';",
 
 				file: "{{{ComponentName}}}.scss",
@@ -116,63 +110,7 @@ const templates = {
 			},
 
 			group: {
-				content: `{{{Styles}}}
-				export default function {{{ComponentName}}}() {
-					return <{{{Main_tag}}} className="{{{ComponentName}}}"></{{{Main_tag}}}>;
-				}`,
-				file: "{{{ComponentName}}}.jsx",
-			},
-		},
-	},
-	"NextJS(js)": {
-		"$Main_tag[input]": "div2",
-
-		"#Styles[list]": {
-			module: {
-				val: "import styles from './{{{ComponentName}}}.module.css';",
-				content: "",
-				file: "{{{ComponentName}}}.module.css",
-			},
-			css: {
-				val: "import './{{{ComponentName}}}.css';",
-				content: "",
-				file: "{{{ComponentName}}}.css",
-			},
-			scss2: {
-				val: "import './{{{ComponentName}}}.scss';",
-
-				file: "{{{ComponentName}}}.scss",
-			},
-			none: {
-				let: "",
-				content: "",
-				file: "",
-			},
-		},
-
-		"Component_type[radio]": {
-			server: {
-				content: `{{{Styles}}}
-				export default function {{{ComponentName}}}() {
-					return <{{{Main_tag}}} className="{{{ComponentName}}}"></{{{Main_tag}}}>;
-				}`,
-				file: "{{{ComponentName}}}.jsx",
-			},
-
-			client: {
-				content: `{{{Styles}}}
-				export default function {{{ComponentName}}}() {
-					return <{{{Main_tag}}} className="{{{ComponentName}}}"></{{{Main_tag}}}>;
-				}`,
-				file: "{{{ComponentName}}}.jsx",
-			},
-
-			group: {
-				content: `{{{Styles}}}
-				export default function {{{ComponentName}}}() {
-					return <{{{Main_tag}}} className="{{{ComponentName}}}"></{{{Main_tag}}}>;
-				}`,
-				file: "{{{ComponentName}}}.jsx",
+				folder: "({{{ComponentName}}})",
 			},
 		},
 	},
