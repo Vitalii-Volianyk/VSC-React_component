@@ -1,9 +1,9 @@
 {
-	"name": "project-structure-creation",
+	"name": "react-component-structure",
 	"displayName": "Create project structure",
 	"description": "Create filese/folder structure from templates for any project",
-	"icon": "assets/react-icon-29.png",
-	"version": "4.0.1",
+	"icon": "assets/VSC/icon.png",
+	"version": "4.0.2",
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/Vitalii-Volianyk/VSC-React_component"
