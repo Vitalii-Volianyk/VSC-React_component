@@ -102,7 +102,9 @@ const templates = {
 			},
 
 			client: {
-				content: `{{{Styles}}}
+				content: `
+				use client
+				{{{Styles}}}
 				export default function {{{ComponentName}}}() {
 					return <{{{Main_tag}}} className="{{{ComponentName}}}"></{{{Main_tag}}}>;
 				}`,
