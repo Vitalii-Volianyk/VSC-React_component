@@ -1,20 +1,21 @@
-### React component
+### Edit structure
 
-Use rigth click on the components folder to open the context menu and create new React component structure.
-![New component structure](assets/11.png)
+Use rigth click on the folder than You want edit.
 
-Type component name and press Enter for create basic structure based on global/local settings.
-![Basic/functional structure](assets/12.png)
-![Basic/functional structure](assets/15.png)
+![Edit structure](assets/VSC/11.png)
 
-Type .c with component name for create class structure based on global/local settings.
-![Class structure](assets/13.png)
-![Class structure](assets/16.png)
+Chose parametrs for selected template and create all neded folders.
 
-Type .e with component name for create clear structure.
-![Empty structure](assets/14.png)
-![Empty structure](assets/17.png)
+![Basic/functional structure](assets/VSC/12.png)
 
-Use global/local settings for change default structure and styles format.
-![Settings](assets/18.png)
-![Settings](assets/19.png)
+If neded You can delete unnesesary changes befor saving.
+
+![unsaved structure](assets/VSC/13.png)
+
+After You click "Save" button all changes will be created in explorer.
+
+![Empty structure](assets/VSC/14.png)
+
+Use global/local settings for change used template file.
+
+![Settings](assets/VSC/15.png)
