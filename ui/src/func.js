@@ -16,8 +16,10 @@ const prepareTemplate = (
 			return;
 		} else if (key.match(/^#/)) {
 			let name = key.match(/^#(.*)\[.*\]$/)[1];
-			subTemplatestemp[name] = templates[currentType][key][subTemplates[name]];
-			subVars[name] = templates[currentType][key][subTemplates[name]].val || "";
+			subTemplatestemp[name] =
+				templates[currentType][key][subTemplates[name]];
+			subVars[name] =
+				templates[currentType][key][subTemplates[name]].val || "";
 		} else {
 			let name = key.match(/^(.*)\[.*\]$/)[1];
 			template[name] = templates[currentType][key][currTemplates[name]];
@@ -31,19 +33,26 @@ const prepareTemplate = (
 	};
 };
 
-const precompileTemplate = (item, compiled, newFoderPath) => {
+const precompileTemplate = (item, compiled, newFolderPath) => {
 	if (!item.file) {
 		if (item.folder) {
 			return {
-				path: newFoderPath + "/" + Handlebars.compile(item.folder)(compiled),
-				basePath: newFoderPath,
+				path:
+					newFolderPath +
+					"/" +
+					Handlebars.compile(item.folder)(compiled),
+				basePath: newFolderPath,
 			};
 		}
 		return;
 	}
 	const content = Handlebars.compile(item.content || "")(compiled);
 	const file = Handlebars.compile(item.file)(compiled);
-	return { content, path: newFoderPath + "/" + file, basePath: newFoderPath };
+	return {
+		content,
+		path: newFolderPath + "/" + file,
+		basePath: newFolderPath,
+	};
 };
 
 const compileTemplate = (
@@ -78,7 +87,11 @@ const compileTemplate = (
 			});
 			return;
 		}
-		const preC = precompileTemplate(subTemplates[key], compiled, newFoderPath);
+		const preC = precompileTemplate(
+			subTemplates[key],
+			compiled,
+			newFoderPath
+		);
 		if (preC) {
 			toGenerate.push(preC);
 		}

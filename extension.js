@@ -1,6 +1,7 @@
 const path = require("path");
 const fs = require("fs");
 const vscode = require("vscode");
+const { test1 } = require("./js/estClass.js");
 
 function getComponentTemplate() {
 	let temp = fs.readFileSync(path.join(__dirname, "templates.js"), "utf8");
@@ -23,7 +24,9 @@ async function getSubFolders(path, file) {
 async function readFolders(path) {
 	let folders = {};
 
-	const files = await vscode.workspace.fs.readDirectory(vscode.Uri.parse(path));
+	const files = await vscode.workspace.fs.readDirectory(
+		vscode.Uri.parse(path)
+	);
 
 	for (let i = 0; i < files.length; i++) {
 		const file = files[i];
@@ -64,13 +67,16 @@ function createFolder(path) {
 }
 
 async function activate(context) {
+	test1();
 	const UserDirectoryPath = vscode.env.appRoot;
 	const config = vscode.workspace.getConfiguration("structure_creation");
 	if (config.inspect("templatesPath").globalValue === undefined) {
 		config.update(
 			"templatesPath",
-			vscode.Uri.joinPath(vscode.Uri.parse(UserDirectoryPath), "templates")
-				.path,
+			vscode.Uri.joinPath(
+				vscode.Uri.parse(UserDirectoryPath),
+				"templates"
+			).path,
 			true
 		);
 	}
@@ -101,7 +107,9 @@ async function activate(context) {
 				vscode.Uri.joinPath(
 					context.extensionUri,
 					`media/static/css/${
-						cssPath.filter((item) => item[0].match(/.*\.css$/))[0][0]
+						cssPath.filter((item) =>
+							item[0].match(/.*\.css$/)
+						)[0][0]
 					}`
 				)
 			);
@@ -180,7 +188,10 @@ async function activate(context) {
 									if (err) {
 										if (err.code === "ENOENT") {
 											fs.writeFile(
-												path.join(templatesPath, "templates.js"),
+												path.join(
+													templatesPath,
+													"templates.js"
+												),
 												getComponentTemplate(),
 												(err) => {
 													if (err) {
@@ -201,7 +212,9 @@ async function activate(context) {
 
 									webview.postMessage({
 										command: "template",
-										data: new Function(`${data} return templates;`)(),
+										data: new Function(
+											`${data} return templates;`
+										)(),
 									});
 								}
 							);
