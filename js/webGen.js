@@ -2,8 +2,11 @@ const vscode = require("vscode");
 const path = require("path");
 const fs = require("fs");
 
-function getComponentTemplate() {
-	let temp = fs.readFileSync(path.join(__dirname, "templates.js"), "utf8");
+function getComponentTemplate(templateType = "ReactJS") {
+	let temp = fs.readFileSync(
+		path.join(__dirname, `templates/${templateType}.jst`),
+		"utf8"
+	);
 	return temp;
 }
 
@@ -41,8 +44,25 @@ async function getTemplates(templatesPath) {
 	var templates = {};
 	if (!fs.existsSync(templatesPath)) {
 		fs.mkdirSync(templatesPath, { recursive: true });
+		fs.writeFileSync(
+			path.join(templatesPath, "ReactJS.jst"),
+			getComponentTemplate("ReactJS")
+		);
+		fs.writeFileSync(
+			path.join(templatesPath, "NextJS.jst"),
+			getComponentTemplate("NextJS")
+		);
 		console.log("Templates folder created at", templatesPath);
-		return undefined;
+	} else if (fs.readdirSync(templatesPath).length === 0) {
+		fs.writeFileSync(
+			path.join(templatesPath, "ReactJS.jst"),
+			getComponentTemplate("ReactJS")
+		);
+		fs.writeFileSync(
+			path.join(templatesPath, "NextJS.jst"),
+			getComponentTemplate("NextJS")
+		);
+		console.log("Templates folder is empty, default templates created.");
 	}
 
 	const files = await fs.promises.readdir(templatesPath, {
