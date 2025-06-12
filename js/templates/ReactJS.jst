@@ -12,24 +12,24 @@ const template = {
 		styled: {
 			content: `import styled from "@emotion/styled";
 
-					export const Styled{{{Main_tag}}} = styled.{{{Main_tag}}}`,
-			val: `import { Styled{{{Main_tag}}} } from "./{{{ComponentName}}}.styled";`,
-			file: "{{{ComponentName}}}.styled.js",
+					export const Styled{{{Capitalize Main_tag}}} = styled.{{{Main_tag}}}`,
+			val: `import { Styled{{{Capitalize Main_tag}}} } from "./{{{Capitalize ComponentName}}}.styled";`,
+			file: "{{{Capitalize ComponentName}}}.styled.js",
 		},
 		module: {
-			val: 'import styles from "./{{{ComponentName}}}.module.css";',
-			content: 'import "./{{{ComponentName}}}.module.css";',
-			file: "{{{ComponentName}}}.module.css",
+			val: 'import styles from "./{{{Capitalize ComponentName}}}.module.css";',
+			content: 'import "./{{{Capitalize ComponentName}}}.module.css";',
+			file: "{{{Capitalize ComponentName}}}.module.css",
 		},
 		css: {
-			val: "import './{{{ComponentName}}}.css';",
-			content: "import './{{{ComponentName}}}.css';",
-			file: "{{{ComponentName}}}.css",
+			val: "import './{{{Capitalize ComponentName}}}.css';",
+			content: "import './{{{Capitalize ComponentName}}}.css';",
+			file: "{{{Capitalize ComponentName}}}.css",
 		},
 		scss: {
-			val: "import './{{{ComponentName}}}.scss';",
-			content: `import "./{{{ComponentName}}}.scss";`,
-			file: "{{{ComponentName}}}.scss",
+			val: "import './{{{Capitalize ComponentName}}}.scss';",
+			content: `import "./{{{Capitalize ComponentName}}}.scss";`,
+			file: "{{{Capitalize ComponentName}}}.scss",
 		},
 
 		none: {
@@ -43,17 +43,17 @@ const template = {
 		function: [
 			{
 				content: `{{{Styles}}}
-				function {{{ComponentName}}}() {
-					return <Styled{{{Main_tag}}}></Styled{{{Main_tag}}}>;
+				function {{{Capitalize ComponentName}}}() {
+					return <Styled{{{Capitalize Main_tag}}}></Styled{{{Capitalize Main_tag}}}>;
 				}
-					export default {{{ComponentName}}};`,
-				file: "{{{ComponentName}}}.{{{ext}}}",
+					export default {{{Capitalize ComponentName}}};`,
+				file: "{{{Capitalize ComponentName}}}.{{{ext}}}",
 			},
 			{
 				content: `
-					import {{{ComponentName}}} from "./{{{ComponentName}}}";
+					import {{{Capitalize ComponentName}}} from "./{{{Capitalize ComponentName}}}";
 
-					export { {{{ComponentName}}} };`,
+					export { {{{Capitalize ComponentName}}} };`,
 				file: "index.{{{ext}}}",
 			},
 		],
@@ -61,16 +61,16 @@ const template = {
 		class: [
 			{
 				content: `{{{Styles}}}
-				class {{{ComponentName}}} extends React.Component {
+				class {{{Capitalize ComponentName}}} extends React.Component {
 					render() {
-						return <{{{Main_tag}}} className="{{{ComponentName}}}"></{{{Main_tag}}}>;
+						return <{{{Capitalize Main_tag}}} className="{{{Capitalize ComponentName}}}"></{{{Capitalize Main_tag}}}>;
 					}
 				}
-				export default {{{ComponentName}}};`,
-				file: "{{{ComponentName}}}.{{{ext}}}",
+				export default {{{Capitalize ComponentName}}};`,
+				file: "{{{Capitalize ComponentName}}}.{{{ext}}}",
 			},
 			{
-				content: "export default {{{ComponentName}}};",
+				content: "export default {{{Capitalize ComponentName}}};",
 				file: "index.{{{ext}}}",
 			},
 		],
