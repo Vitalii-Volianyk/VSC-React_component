@@ -2,14 +2,21 @@ const templates = {
 	ReactJS: {
 		"$Main_tag[input]": "div",
 		"$ext[list]": {
-			js: {
-				val: "js",
-			},
 			jsx: {
 				val: "jsx",
 			},
+			js: {
+				val: "js",
+			},
 		},
 		"#Styles[list]": {
+			styled: {
+				content: `import styled from "@emotion/styled";
+
+					export const Styled{{{Main_tag}}} = styled.{{{Main_tag}}}`,
+				val: `import { Styled{{{Main_tag}}} } from "./{{{ComponentName}}}.styled";`,
+				file: "{{{ComponentName}}}.styled.js",
+			},
 			module: {
 				val: 'import styles from "./{{{ComponentName}}}.module.css";',
 				content: 'import "./{{{ComponentName}}}.module.css";',
@@ -25,6 +32,7 @@ const templates = {
 				content: `import "./{{{ComponentName}}}.scss";`,
 				file: "{{{ComponentName}}}.scss",
 			},
+
 			none: {
 				val: "",
 				content: "",
@@ -37,13 +45,16 @@ const templates = {
 				{
 					content: `{{{Styles}}}
 				function {{{ComponentName}}}() {
-					return <{{{Main_tag}}} className="{{{ComponentName}}}"></{{{Main_tag}}}>;
+					return <Styled{{{Main_tag}}}></Styled{{{Main_tag}}}>;
 				}
 					export default {{{ComponentName}}};`,
 					file: "{{{ComponentName}}}.{{{ext}}}",
 				},
 				{
-					content: "export default {{{ComponentName}}};",
+					content: `
+					import {{{ComponentName}}} from "./{{{ComponentName}}}";
+
+					export { {{{ComponentName}}} };`,
 					file: "index.{{{ext}}}",
 				},
 			],

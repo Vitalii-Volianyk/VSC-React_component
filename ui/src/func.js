@@ -1,5 +1,46 @@
 import Handlebars from "handlebars";
 
+Handlebars.registerHelper("capitalize", function (aString) {
+	return aString.charAt(0).toUpperCase() + aString.slice(1);
+});
+Handlebars.registerHelper("lowerCase", function (aString) {
+	return aString.toLowerCase();
+});
+Handlebars.registerHelper("upperCase", function (aString) {
+	return aString.toUpperCase();
+});
+Handlebars.registerHelper("camelCase", function (aString) {
+	return aString
+		.split(" ")
+		.map((word, index) => {
+			if (index === 0) {
+				return word.toLowerCase();
+			}
+			return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+		})
+		.join("");
+});
+Handlebars.registerHelper("kebabCase", function (aString) {
+	return aString
+		.split(" ")
+		.map((word) => word.toLowerCase())
+		.join("-");
+});
+Handlebars.registerHelper("snakeCase", function (aString) {
+	return aString
+		.split(" ")
+		.map((word) => word.toLowerCase())
+		.join("_");
+});
+Handlebars.registerHelper("pascalCase", function (aString) {
+	return aString
+		.split(" ")
+		.map(
+			(word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
+		)
+		.join("");
+});
+
 const prepareTemplate = (
 	templates,
 	currentType,

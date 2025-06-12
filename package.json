@@ -3,7 +3,7 @@
 	"displayName": "Create project structure",
 	"description": "Create files/folder structure from templates for any project",
 	"icon": "assets/VSC/icon.png",
-	"version": "4.0.3",
+	"version": "5.0.0",
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/Vitalii-Volianyk/VSC-React_component"
