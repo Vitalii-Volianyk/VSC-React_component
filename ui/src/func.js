@@ -1,15 +1,15 @@
 import Handlebars from "handlebars";
 
-Handlebars.registerHelper("Capitalize", function (aString) {
+Handlebars.registerHelper("capitalize", function (aString) {
 	return aString.charAt(0).toUpperCase() + aString.slice(1);
 });
-Handlebars.registerHelper("Lowercase", function (aString) {
+Handlebars.registerHelper("lowerCase", function (aString) {
 	return aString.toLowerCase();
 });
-Handlebars.registerHelper("Uppercase", function (aString) {
+Handlebars.registerHelper("upperCase", function (aString) {
 	return aString.toUpperCase();
 });
-Handlebars.registerHelper("CamelCase", function (aString) {
+Handlebars.registerHelper("camelCase", function (aString) {
 	return aString
 		.split(" ")
 		.map((word, index) => {
@@ -20,19 +20,19 @@ Handlebars.registerHelper("CamelCase", function (aString) {
 		})
 		.join("");
 });
-Handlebars.registerHelper("KebabCase", function (aString) {
+Handlebars.registerHelper("kebabCase", function (aString) {
 	return aString
 		.split(" ")
 		.map((word) => word.toLowerCase())
 		.join("-");
 });
-Handlebars.registerHelper("SnakeCase", function (aString) {
+Handlebars.registerHelper("snakeCase", function (aString) {
 	return aString
 		.split(" ")
 		.map((word) => word.toLowerCase())
 		.join("_");
 });
-Handlebars.registerHelper("PascalCase", function (aString) {
+Handlebars.registerHelper("pascalCase", function (aString) {
 	return aString
 		.split(" ")
 		.map(
